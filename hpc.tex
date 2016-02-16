@@ -901,7 +901,7 @@ $ ln -s /path/to/sample/*.fastq.gz .
 
 Many programs can use compressed split files directly.  If they can't, use this trick
 \begin{verbatim}
-$ bwa ... <(zcat *R1_*.fastq.gz) <(zcat *R1_*.fastq.gz) 
+$ bwa ... <(zcat *R1_*.fastq.gz) <(zcat *R2_*.fastq.gz) 
 \end{verbatim}
 \end{frame}
 
