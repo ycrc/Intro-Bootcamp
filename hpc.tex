@@ -1,0 +1,1115 @@
+\documentclass[10pt]{beamer}
+\usetheme{Singapore}
+\usecolortheme{default}
+\usecolortheme{orchid}
+\useoutertheme{infolines}
+\useinnertheme[shadow=true]{rounded}
+
+\usepackage{multimedia}
+
+\title{Using the Yale HPC Clusters}
+\titlegraphic{\includegraphics[height=2.0cm]{logo.png}}
+\logo{\includegraphics[height=0.5cm]{logo.png}}
+\author{{Stephen Weston} \and {Robert Bjornson}}
+\institute[Yale]{
+  Yale Center for Research Computing \\
+  Yale University
+}
+\date{Dec 2015}
+\begin{document}
+
+
+%----------- titlepage ----------------------------------------------%
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{To get help}
+\begin{itemize}
+\item Send an email to: \url{hpc@yale.edu}
+\item Read documentation at: \url{http://research.computing.yale.edu/hpc-support}
+\item Email us directly:
+\begin{itemize}
+\item Stephen.weston@yale.edu, Office hours at CSSSI on Wednesday morning from 9 to 12 or by appointment
+\item Robert.bjornson@yale.edu, Office hour by appointment
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{What is the Yale Center for Research Computing?}
+
+\begin{itemize}
+\item Newly created Center to support your research computing needs.
+\item Applications specialists and system engineers.
+\item Available to consult with and educate users
+\item Manage compute clusters
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{What is a cluster?}
+
+A cluster usually consists of a hundred to a thousand rack mounted
+computers, called \textbf{nodes}.  It has one or two login nodes
+that are externally accessible, but most of the nodes are
+compute nodes and are only accessed from a login node via a
+batch queueing system, also called a \textbf{job scheduler}.
+
+\vskip10pt
+The CPU used in clusters may be similar to the CPU in your
+desktop computer, but in other respects they are rather different.
+
+\begin{itemize}
+\item Many cores (cpus) per node
+\item No monitors, no CD/DVD drives, no audio or video cards
+\item Don't always have a local hard drive
+\item Very large distributed file system(s)
+\item Moderate amount of RAM: often about 5 GB per core
+\item Usually connected internally by a fast network
+\item Linux operating system
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Why use a cluster?}
+Clusters are very powerful and useful, but it may take some
+time to get used to them.
+Here are some reasons to go to that effort:
+
+\begin{itemize}
+\item Don't want to tie up your own machine for many hours or days
+\item Have many long running jobs to run
+\item Want to run in parallel to get results quicker
+\item Need more disk space
+\item Need more memory
+\item Want to use software installed on the cluster
+\item Want to access data stored on the cluster
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Limitations of clusters}
+Clusters are not the answer to all large scale computing problems.
+Some of the limitations of clusters are:
+
+\begin{itemize}
+\item Cannot run Windows programs
+\item Not really intended for interactive jobs (especially graphical)
+\item Jobs that run for weeks can be a problem (unless checkpointed)
+\item Most nodes have only a moderate amount of memory
+\item Not for persistent services (DBs or web servers)
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Summary of Yale Clusters}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+& \textbf{Omega} & \textbf{Grace}& \textbf{Louise} & \textbf{Bulldogn} \\
+\hline
+\textbf{Role} & FAS & FAS & LS/Med & YCGA  \\
+\hline
+\textbf{Total nodes} & 1028 & 216 & 321 & 165  \\
+\hline
+\textbf{Cores/node} & 8 & 20 & 4-64 & 8-64 \\
+\hline
+\textbf{Mem/node} & 36 GB/48 GB & 128 GB & 16-512 GB & 48-512 GB  \\
+\hline
+\textbf{Network} & QDR IB & FDR IB& 1-10 Gb EN & 1-10 Gb EN  \\
+\hline
+\textbf{File system} & Lustre & GPFS & NAS (GPFS) & NAS (GPFS) \\
+\hline
+\textbf{Batch queueing} & Torque & LSF & Torque & Torque \\
+\hline
+\end{tabular}
+
+\vskip10pt
+
+Details on each cluster here:
+\url{http://research.computing.yale.edu/hpc-clusters}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Setting up a account}
+
+Accounts are free of charge to Yale researchers.
+\vskip10pt
+
+Request an account at: \url{http://research.computing.yale.edu/account-request}.
+
+\vskip10pt
+After your account has been approved and created, you will receive
+an email describing how to access your account.  This may involve setting up ssh keys or 
+using a secure login application.  Details vary by cluster.
+
+\vskip10pt
+If you need help setting up or using ssh, send an email to: \url{hpc@yale.edu}.
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Sshing to Bulldogn}
+
+\begin{itemize}
+\item Bulldogn has an additional level of ssh security, using Multi Factor Authentication (MFA)
+\item We use Duo, the same MFA as other secure Yale sites
+\item See http://its.yale.edu/services/web-and-application-services/iam-authentication-services/multifactor-authentication-mfa-duo
+\end{itemize}
+
+Example:
+\begin{verbatim}
+bjornson@debian:~$ ssh rdb9@bulldogn.hpc.yale.edu
+Enter passphrase for key '/home/bjornson/.ssh/id_rsa': 
+Duo two-factor login for rdb9
+
+Enter a passcode or select one of the following options:
+
+ 1. Duo Push to XXX-XXX-9022
+ 2. Phone call to XXX-XXX-9022
+ 3. SMS passcodes to XXX-XXX-9022
+
+Passcode or option (1-3): 1
+Success. Logging you in...
+\end{verbatim}  
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Running jobs on a cluster}
+
+Regardless of the queuing system, there are two general methods to run jobs: interactive and batch.
+
+\vskip10pt
+Interactive jobs are like a remote session.  You are allocated a node or nodes, and are logged into the node.  You
+run whatever commands you like, and then release the node.  Interactive jobs are typically used for development, debugging, or 
+interactive environments like R and Matlab. 
+
+\vskip10pt
+Batch jobs are non-interactive.  You create a script that describes the job you want to run and 
+the resources it requires.  You submit the script, and the system finds appropriate resources and runs without
+your participation.  When the job finishes, you are alerted.  Batch jobs are best for production computing.
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Torque: Example of an interactive job}
+\begin{verbatim}
+laptop$ ssh sw464@omega.hpc.yale.edu
+Last login: Thu Nov  6 10:48:46 2014 from akw105.cs.yale.internal
+[ snipped ascii art, etc ]
+login-0-0$ qsub -I -q queuename
+qsub: waiting for job 4347393.rocks.omega.hpc.yale.internal to start
+qsub: job 4347393.rocks.omega.hpc.yale.internal ready
+compute-34-15$ cd ~/workdir
+compute-34-15$ module load Apps/R/3.0.3
+compute-34-15$ R --slave -f compute.R
+compute-34-15$ exit 
+login-0-0$ 
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{LSF: Example of an interactive job}
+\begin{verbatim}
+laptop$ ssh sw464@grace.hpc.yale.edu
+Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
+[ snipped ascii art, etc ]
+grace1$ bsub -Is -q queuename bash
+Job <358314> is submitted to queue.
+<<Waiting for dispatch ...>>
+<<Starting on c01n01>>
+c01n01$ cd ~/workdir
+c01n01$ module load Apps/R/3.0.3
+c01n01$ R  --slave -f compute.R
+c01n01$ exit 
+login-0-0$ 
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Example batch script (Torque)}
+Here is a very simple batch script that executes an R script.
+It can contain PBS directives that embed qsub options
+in the script itself, making it easier to submit.  These options
+can be overridden by the command line arguments, however.
+
+\begin{block}{}
+\begin{verbatim}
+#!/bin/bash
+#PBS -q queuename
+#PBS -m abe -M stephen.weston@yale.edu
+cd $PBS_O_WORKDIR
+
+module load Apps/R/3.0.3
+R --slave -f compute.R
+\end{verbatim}
+\end{block}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Example of a non-interactive/batch job (Torque)}
+\begin{verbatim}
+laptop$ ssh sw464@omega.hpc.yale.edu
+Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
+[ snipped ascii art, etc ]
+login-0-0$ cd ~/workdir
+login-0-0$ qsub batch.sh
+4348736.rocks.omega.hpc.yale.internal
+login-0-0$ qstat 4348736
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Example batch script (LSF)}
+Here is a very simple batch script that executes an R script.
+It can contain BSUB directives that embed bsub options
+in the script itself, making it easier to submit.  These options
+can be overridden by the command line arguments, however.
+
+\begin{block}{}
+\begin{verbatim}
+#!/bin/bash
+#BSUB -q shared
+
+# automatically in submission dir
+module load Apps/R/3.0.3
+R --slave -f compute.R
+\end{verbatim}
+\end{block}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Example of a non-interactive/batch job (LSF)}
+\begin{verbatim}
+laptop$ ssh sw464@grace.hpc.yale.edu
+Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
+[ snipped ascii art, etc ]
+grace1$ cd ~/workdir
+grace1$ bsub < batch.sh
+Job <358314> is submitted to queue <shared>.
+grace1$ bjobs 358314
+\end{verbatim}
+
+\vskip14pt
+Note that ``batch.sh'' was specified via input redirection.
+This is required when using BSUB directives in the script,
+otherwise the directives will be ignored.
+\end{frame}
+
+%----------- advanced slides ----------------------------------------%
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Copy scripts and data to the cluster}
+On Linux and Mac OS/X, I use the standard scp and rsync commands
+to copy scripts and data files from my local machine to the cluster,
+or more specifically, to the login node.
+
+\begin{verbatim}
+laptop$ scp -r ~/workdir netid@omega.hpc.yale.edu:
+laptop$ rsync -av ~/workdir netid@grace.hpc.yale.edu:
+\end{verbatim}
+
+On Windows, the WinSCP application is available from the Yale Software
+Library: \url{http://software.yale.edu}.
+
+\vskip10pt
+Other windows options include:
+
+\begin{itemize}
+\item{Bitvise ssh \url{https://www.bitvise.com}}
+\item{Cygwin (Linux emulator in Windows: \url{https://www.cygwin.com}}
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Ssh to a login node}
+To access any of the clusters, you must use \textbf{ssh}.
+From a Mac or Linux machine, you simply use the \textbf{ssh} command:
+
+\begin{verbatim}
+laptop$ ssh netid@omega.hpc.yale.edu
+laptop$ ssh netid@grace.hpc.yale.edu
+laptop$ ssh netid@louise.hpc.yale.edu
+laptop$ ssh netid@bulldogn.hpc.yale.edu
+\end{verbatim}
+
+From a Windows machine, you can choose from programs such as PuTTY or
+X-Win32, both of which are available from the Yale Software Library:
+\url{http://software.yale.edu}..
+
+\vskip10pt
+For more information on using PuTTY (and WinSCP), go to:
+\url{http://research.computing.yale.edu/faq\#ssh}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Summary of Torque commands (Omega/Louise/Bulldogn)}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Description} & \textbf{Command} \\
+\hline
+Submit a job & qsub [\textit{opts}] \textit{SCRIPT} \\
+\hline
+Status of a job & qstat \textit{JOBID} \\
+\hline
+Status of a user's jobs & qstat -u \textit{NETID} \\
+\hline
+Detailed status of a user's jobs & qstat -1 -n -u \textit{NETID} \\
+\hline
+Cancel a job & qdel \textit{JOBID} \\
+\hline
+Get queue info & qstat -Q \\
+\hline
+Get node info & pbsnodes \textit{NODE} \\
+\hline
+\end{tabular}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Summary of qsub options}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Description} & \textbf{Option} \\
+\hline
+Queue & -q \textit{QUEUE} \\
+\hline
+Process count & -l nodes=\textit{N}:ppn=\textit{M} \\
+\hline
+Wall clock limit & -l walltime=\textit{DD}:\textit{HH}:\textit{MM}:\textit{SS} \\
+\hline
+Memory limit & -l mem=\textit{J}gb \\
+\hline
+Interactive job & -\texttt{I} \\
+\hline
+Interactive/X11 job & -\texttt{I} -X \\
+\hline
+Job name & -N \textit{NAME} \\
+\hline
+\end{tabular}
+
+\vskip10pt
+Examples:
+\begin{verbatim}
+login-0-0$ qsub -I -q fas_normal -l mem=32gb,walltime=24:00:00
+login-0-0$ qsub -q fas_long -l mem=32gb,walltime=3:00:00:00 job.sh
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Summary of LSF commands (Grace)}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Description} & \textbf{Command} \\
+\hline
+Submit a job & bsub [\textit{opts}] \textless \textit{SCRIPT} \\
+\hline
+Status of a job & bjobs \textit{JOBID} \\
+\hline
+Status of a user's jobs & bjobs -u \textit{NETID} \\
+\hline
+Cancel a job & bkill \textit{JOBID} \\
+\hline
+Get queue info & bqueues \\
+\hline
+Get node info & bhosts \\
+\hline
+\end{tabular}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Summary of LSF bsub options (Grace)}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Description} & \textbf{Option} \\
+\hline
+Queue & -q \textit{QUEUE} \\
+\hline
+Process count & -n \textit{P} -R "span[hosts=1]" \\
+\hline
+Process count & -n \textit{P} \\
+\hline
+Wall clock limit & -W \textit{HH}:\textit{MM} \\
+\hline
+Memory limit & -M \textit{M} \\
+\hline
+Interactive job & -\texttt{Is} bash \\
+\hline
+Interactive/X11 job & -\texttt{Is} -XF bash \\
+\hline
+Job name & -J \textit{NAME} \\
+\hline
+\end{tabular}
+
+\vskip10pt
+Examples:
+\begin{verbatim}
+grace1$ bsub -Is -q shared -M 32768 -W 24:00     # 32gb for 1 day
+grace1$ bsub -q long -M 32768 -W 72:00 < job.sh  # 32gb for 3 days
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Grace: Notes on memory limits}
+The \textbf{-M} option specifies the maximum memory per core in
+megabytes.
+It is a runtime limit, and is not used for scheduling purposes.
+The default value is 5120, or 5 gigabytes per core.
+
+\vskip10pt
+The \textbf{-R "rusage[mem=M]"} option specifies the memory to ``reserve''
+for the job on each node. It is used for scheduling purposes and has no
+effect at runtime.
+The default value is 5120, or 5 gigabytes per node.
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Omega: Requesting walltime with qsub}
+The value of \textbf{walltime} is particularly important because if you
+ask for too little time, your job will be killed, but if you ask for too
+much, it may not be scheduled to run for a long time.
+
+\begin{itemize}
+\item Specified as DD:HH:MM:SS (days, hours, minutes, seconds)
+\item Default is one hour
+\item Try to determine expected runtime during testing
+\end{itemize}
+
+The following requests four hours of time:
+
+\begin{verbatim}
+login-0-0$ qsub -q fas_normal -l walltime=4:00:00 batch.sh
+\end{verbatim}
+
+If your job checkpoints itself periodically, then this decision is
+less critical.
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Grace: Requesting walltime with bsub}
+You should use the bsub \textbf{-W} option to specify the maximum time
+needed by your job. If you exceed this time, your job will be killed.
+
+\begin{itemize}
+\item Specified as HH:MM (hours, minutes)
+\item Default is one hour
+\item Try to determine expected runtime during testing
+\end{itemize}
+
+The following requests four hours of time:
+
+\begin{verbatim}
+grace1$ bsub -q shared -W 4:00 < batch.sh
+\end{verbatim}
+
+If your job checkpoints itself periodically, then this decision is
+less critical.
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Submission Queues}
+
+Regardless of which cluster you are on, you will submit jobs to a particular queue, depending on:
+\begin{itemize}
+\item{Job's requirements}
+\item{Access rights for particular queues}
+\item{Queue rules}
+\end{itemize}
+
+Each cluster has its own queues, with specific rules.  We detail them in the following slides.
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Omega Queues}
+You must always specify a queue via the qsub \textbf{-q} argument on
+Omega.  The primary factor in choosing a queue is the value of
+\textbf{walltime} because the different queues have different
+restrictions on how long jobs can run.
+
+\vskip10pt
+\begin{description}[fas\_very\_long]
+\item[fas\_very\_long]       4 weeks
+\item[fas\_long]             3 days
+\item[fas\_high]             1 day
+\item[fas\_normal]           1 day
+\item[fas\_devel]            4 hours
+\end{description}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Grace Queues}
+The default queue on Grace is \textbf{shared}, but you can specify
+a different queue via the bsub \textbf{-q} argument.
+The primary factor in choosing a queue is the value of the \textbf{-W}
+option because the different queues have different restrictions on how
+long jobs can run.
+
+\vskip10pt
+\begin{description}[interactive]
+\item[long]                  4 weeks
+\item[week]                  1 week
+\item[shared]                1 day
+\item[interactive]           4 hours
+\end{description}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Louise Queues}
+The default queue on Louise is \textbf{general}, but you can specify
+a different queue via the qsub \textbf{-q} argument.
+
+\begin{itemize}
+\item All Louise jobs have a default walltime limit of 30 days.  
+\item Most Louise users use the general queue.  Specific PI groups have purchased dedicated nodes, and have 
+queues of their own.  Those nodes, when idle, are available to all users via the scavenge queue.  
+\item Jobs on the scavenge queue are subject to immediate termination without warning if the owner needs them.
+\item Louise has 5 different nodes types, ranging from 4-64 cores, and 16-512 GB of RAM.  General queue jobs may be run on any
+of these node types.  Use -W PARTITION:\textit{type} to select a specific type. 
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{BulldogN Queues}
+The default queue on Louise is \textbf{default}, but you can specify
+a different queue via the qsub \textbf{-q} argument.
+
+\begin{itemize}
+\item All BulldogN jobs have a default walltime limit of 30 days.  
+\item Most BulldogN users use the default queue.  
+\item Bigmem queue is for jobs requiring large amounts of RAM.
+\item BulldogN has 3 different nodes types, ranging from 8-64 cores, and 48-512 GB of RAM.  
+Default queue jobs run on 8 and 16 core nodes.
+Use -W PARTITION:\textit{type} to select a specific type. 
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{BulldogN Queue Rules}
+
+\begin{description}
+\item[default] limit of 10 jobs and 100 cores per user.
+\item[bigmem]  64 core/512 GB nodes. Two nodes per user max.
+
+\end{description}
+ 
+See \url{http://research.computing.yale.edu/bulldogn\#queues} for more information.
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Module files}
+Much of the HPC software on the FAS clusters is installed in non-standard
+locations. This makes it easier to to maintain different versions of the same
+software allowing users to specify the version of an application that
+they wish to use.  This is done with the module command.
+
+\vskip10pt
+For example, before you can execute Matlab, you need to initialize your
+environment by loading a Matlab ``module file'':
+
+\begin{verbatim}
+$ module load Apps/Matlab/R2012b
+\end{verbatim}
+
+This will modify variables in your environment such as PATH and
+LD\_LIBRARY\_PATH so that you can execute the \textbf{matlab} command.
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Omega: Finding module files}
+There are many module files for the various applications, tools, and
+libraries installed on the FAS clusters.  To find the module file that
+will allow you to run Matlab, use the `modulefind` command:
+
+\begin{verbatim}
+login-0-0$ modulefind matlab
+\end{verbatim}
+
+This will produce output like:
+
+\begin{verbatim}
+/home/apps/fas/Modules:
+Apps/Matlab/R2010b
+Apps/Matlab/R2012b
+Apps/Matlab/R2014a
+\end{verbatim}
+
+You can get a listing of available module files with:
+\begin{verbatim}
+login-0-0$ module avail
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Grace: Finding module files}
+There are many module files for the various applications, tools, and
+libraries installed on the FAS clusters.  To find the module file that
+will allow you to run Matlab, use the `module spider` command:
+
+\begin{verbatim}
+grace1$ module spider matlab
+----------------------------------------------------------------------------
+  Apps/Matlab:
+----------------------------------------------------------------------------
+     Versions:
+        Apps/Matlab/R2013b
+        Apps/Matlab/R2014a
+
+  To find detailed information about Apps/Matlab please enter the full name.
+  For example:
+
+     $ module spider Apps/Matlab/R2014a
+\end{verbatim}
+
+You can get a listing of all available module files with:
+\begin{verbatim}
+grace1$ module avail
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Example ``module load'' commands}
+Here are some ``module load'' commands for scripting languages
+installed on both Omega and Grace:
+
+\begin{verbatim}
+module load Langs/Python/2.7.6
+module load Langs/Perl/5.14.2
+module load Apps/R/3.0.3
+module load Apps/Matlab/R2014a
+module load Apps/Mathematica/9.0.1
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Run your program/script}
+When you're finally ready to run your script, you may have some
+trouble determining the correct command line, especially if you want to
+pass arguments to the script.  Here are some examples:
+
+\begin{verbatim}
+compute-20-1$ python compute.py input.dat
+compute-20-1$ R --slave -f compute.R --args input.dat
+compute-20-1$ matlab -nodisplay -nosplash -nojvm < compute.m
+compute-20-1$ math -script compute.m
+compute-20-1$ MathematicaScript -script compute.m input.dat
+\end{verbatim}
+
+You often can get help from the command itself using:
+
+\begin{verbatim}
+compute-20-1$ matlab -help
+compute-20-1$ python -h
+compute-20-1$ R --help
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Omega: Notes on interactive mode}
+Enable X11 forwarding from ssh and qsub:
+\begin{verbatim}
+laptop$ ssh -Y netid@omega.hpc.yale.edu
+login-0-0$ qsub -X -I -q fas_devel
+\end{verbatim}
+
+Faster alternative:
+\begin{verbatim}
+laptop$ ssh netid@omega.hpc.yale.edu
+login-0-0$ qsub -I -q fas_devel
+\end{verbatim}
+
+Once job is running, execute from a different terminal window:
+\begin{verbatim}
+laptop$ ssh -Y netid@omega.hpc.yale.edu
+laptop$ ssh -Y compute-XX-YY
+\end{verbatim}
+
+where ``compute-XX-YY'' is the node allocated to your job.
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Grace: Notes on interactive mode}
+Enable X11 forwarding from ssh and bsub:
+\begin{verbatim}
+laptop$ ssh -Y netid@grace.hpc.yale.edu
+grace1$ bsub -XF -Is -q interactive bash
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Cluster Filesystems}\
+Each cluster has a number of different filesystems for you to use, with different
+rules and performance characteristics.  
+
+\vskip10pt
+
+It is very important to understand the differences.  Generally, each cluster will have:
+
+\begin{description}
+\item[Home]: Backed up, small quota, for scripts, programs, documents, etc.
+\item[Scratch]: Not Backed up.  Automatically purged.  For temporary files.
+\item[Project]: Not Backed up.  For longer term storage.
+\item[Local HD]: /tmp  For local scratch files.
+\item[RAMDISK]: /dev/shm For local scratch files.
+\item[Storage@Yale]: University-wide storage (active and archive).
+\end{description}
+
+Consider using local HD or ramdisk for intermediate files.  Also consider avoiding files by using pipes.
+
+For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Hints for working with YCGA Genomic data}
+\begin{itemize}
+\item Data layout, and avoiding copies
+\item Improving IO
+\item Genome reference files
+\item Standard processing pipelines
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Access data directly rather than copying}
+
+You'll typically get an email from YCGA with links:
+
+\begin{verbatim}
+
+http://sysg1.cs.yale.edu:2011/showrun?run=ba_sequencers5/sequencerX 
+  /runs/150928_D00536_0191_BC79VRANXX 
+Regarding samples:
+
+Sample_7777  …
+\end{verbatim}
+
+The sample url looks like:
+
+\begin{verbatim}
+http://sysg1.cs.yale.edu:2011/gen?fullPath=ba_sequencers5/sequencerX
+  /runs/150928_D00536_0191_BC79VRANXX/Data/Intensities/BaseCalls
+  /Unaligned/Project_PI/Sample_7777 ...
+
+\end{verbatim}
+\end{frame}
+
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Access data directly rather than copying}
+
+Instead of downloading them, you can access them directly on the cluster, by (trivially) 
+converting the url to a path:
+
+\begin{verbatim}
+cd /ycga-ba/ba_sequencers5/sequencerX
+  /runs/150928_D00536_0191_BC79VRANXX/Data/Intensities/BaseCalls
+  /Unaligned/Project_PI/Sample_7777
+\end{verbatim}
+
+Path conversion rules
+\begin{verbatim}
+sequencers... -> /panfs/sequencers...
+ba_sequencers... -> /ycga-ba/ba_sequencers...
+\end{verbatim}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Access data directly rather than copying (cont)}
+
+Your data is in multiple compressed fastq files, typically in a directory
+like Unaligned/Project\_PIname/Sample\_samplename.  
+
+\begin{verbatim}
+7777_GCCAAT-GCCAAT_L008_R1_001.fastq.gz
+7777_GCCAAT-GCCAAT_L008_R1_002.fastq.gz
+7777_GCCAAT-GCCAAT_L008_R1_003.fastq.gz
+7777_GCCAAT-GCCAAT_L008_R1_004.fastq.gz
+...
+7777_GCCAAT-GCCAAT_L008_R2_001.fastq.gz
+7777_GCCAAT-GCCAAT_L008_R2_002.fastq.gz
+7777_GCCAAT-GCCAAT_L008_R2_003.fastq.gz
+7777_GCCAAT-GCCAAT_L008_R2_004.fastq.gz
+...
+\end{verbatim}
+\end{frame}
+
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Use Links to avoid copying fastq files}
+Many users incur a 2-3x space increase:
+
+\begin{verbatim}
+$ zcat Sample*_R2_0??.fastq.gz >  /scratchspace/Sample.fastq
+\end{verbatim}
+
+Use soft links instead
+\begin{verbatim}
+$ mkdir Project/Sample_7777
+$ cd Project/Sample_7777
+$ ln -s /path/to/sample/*.fastq.gz .
+\end{verbatim}
+
+Many programs can use compressed split files directly.  If they can't, use this trick
+\begin{verbatim}
+$ bwa ... <(zcat *R1_*.fastq.gz) <(zcat *R1_*.fastq.gz) 
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Use Pipes to improve performance}
+
+\vskip10pt
+Faster: avoids file IO and increases parallelism
+
+\vskip10pt
+Using Files
+\begin{verbatim}
+$ gunzip test_export.txt.gz 
+$ perl filter.pl test_export.txt \
+  test_filtered.txt
+$ perl illumina_export2sam.pl \
+  --read1=test_filtered.txt > test_filtered.sam
+$ samtools view -bS -t hg19.fa.fai \
+  test_filtered.sam -o test_filtered.bam
+$ samtools sort test_filtered.bam test_sorted
+\end{verbatim}
+
+Using Pipes
+\begin{verbatim}
+$ gunzip -c test.export.txt.gz \
+| perl filter.pl - - \
+| perl illumina\_export2sam.pl --read1=- \
+| samtools view -bS -t hg19.fa.fai - \
+| samtools sort - test.sorted
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Genome references installed on cluster}
+
+Please do not install your own copies of popular files (e.g. genome refs).  
+\vskip10pt
+We have a number of references installed here:
+\begin{verbatim}
+/home/bioinfo/genomes
+\end{verbatim}
+
+If you don't find what you need, please ask us, and we will install them.
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Bioinformatics Assistance}
+
+Contact Jim Knight (j.knight@yale.edu)
+
+http://campuspress.yale.edu/knightlab
+
+The Knight lab has a number of high performance, parallel pipelines for
+doing standard analyses:
+
+\begin{itemize}
+\item read QC
+\item GATK variant detection
+\end{itemize}
+\end{frame}
+
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Wait, where is the Parallelism?}
+
+Qsub or Bsub can allocate multiple nodes, but the script runs on one sequentially.  How do we use multiple cpus?
+
+\begin{itemize}
+\item Submit many batch jobs simultaneously (not good)
+\item Use job arrays (better)
+\item Submit a parallel version of your program (great if you have one)
+\item Use SimpleQueue (excellent)
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{SimpleQueue}
+
+\begin{itemize}
+\item Useful when you have many similar, independent jobs to run
+\item Automatically schedules jobs onto a single PBS allocation
+\end{itemize}
+
+Advantages
+
+\begin{itemize}
+\item Handles startup, shutdown, errors
+\item Only one batch job to keep track of
+\item Keeps track of status of individual jobs
+\item Automatically schedules jobs onto a single PBS allocation
+\end{itemize}
+
+\end{frame}
+
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Using SimpleQueue}
+
+\begin{enumerate}
+\item Create file containing list of commands to run (jobs.list)
+\begin{verbatim}
+cd ~/mydir/myrun; prog arg1 arg2 -o job1.out  
+cd ~/mydir/myrun; prog arg1 arg2 -o job2.out  
+...
+\end{verbatim}
+\item Create launch script
+\begin{verbatim}
+# Louise:
+/path/to/sqPBS.py queue Nodes Account Title jobs.list > run.sh
+# Omega and Grace:
+module load Tools/SimpleQueue
+sqCreateScript -q queuename -n 4 jobs.list > run.sh
+\end{verbatim}
+
+\item Submit launch script
+\begin{verbatim}
+qsub run.sh    # Louise and Omega
+bsub < run.sh  # Grace
+\end{verbatim}
+\end{enumerate}
+
+For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Best Practices}
+
+\begin{itemize}
+\item Start Slowly
+\begin{itemize}
+\item Run your program on a small dataset interactively
+\item In another ssh, watch program with top.  Track memory usage.
+\item Check outputs
+\item Only then, scale up dataset, convert to batch run
+\end{itemize}
+\item Input/Output
+\begin{itemize}
+\item Think about input and output files, number and size
+\item Should you use local or ram filesystem? 
+\end{itemize}
+\item Memory
+
+\begin{itemize}
+\item Use top or /usr/bin/time -a to monitor usage
+\item Consider using -lmem=\#gb, or allocate entire node with -lnodes=\#:ppn=\#
+\end{itemize}
+
+\item Be considerate!  Clusters are shared resources.
+
+\begin{itemize}
+\item Don't run programs on the login nodes.  Make sure to allocate a compute node.
+\item Don't submit a large number of jobs at once.  Use simplequeue.
+\item Don't do heavy IO to /home.
+\item Don't fill filesystems.
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Plug for scripting languages}
+
+\begin{itemize}
+\item Learning basics of a scripting language is a great investment.
+\item Very useful for automating lots of day to day activities
+\begin{itemize}
+\item Parsing data files
+\item Converting file formats
+\item Verifying collections of files
+\item Creating processing pipelines
+\item Summarizing, etc. etc.
+\end{itemize}
+\item Python (strongly recommended)
+\item Bash 
+\item Perl (if your lab uses it)
+\item R (if you do a lot of statistics or graphing)
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Resources}
+
+\begin{itemize}
+\item Please feel free to contact us.
+\item Online documentation: \url{http://research.computing.yale.edu/hpc}
+\item Recommended Books
+\begin{itemize}
+\item Learning Python: Mark Lutz
+\item Python Cookbook: Alex Martelli
+\item Bioinformatics Programming using Python: Mitchell Model
+\item Learning Perl: Randal Schwarz
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}
