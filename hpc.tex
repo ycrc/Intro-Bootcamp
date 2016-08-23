@@ -15,7 +15,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Dec 2015}
+\date{Sep 2016}
 \begin{document}
 
 
@@ -33,7 +33,7 @@
 \item Email us directly:
 \begin{itemize}
 \item Stephen.weston@yale.edu, Office hours at CSSSI on Wednesday morning from 9 to 12 or by appointment
-\item Robert.bjornson@yale.edu, Office hour by appointment
+\item Robert.bjornson@yale.edu, By appointment
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -69,7 +69,6 @@ desktop computer, but in other respects they are rather different.
 \item No monitors, no CD/DVD drives, no audio or video cards
 \item Don't always have a local hard drive
 \item Very large distributed file system(s)
-\item Moderate amount of RAM: often about 5 GB per core
 \item Usually connected internally by a fast network
 \item Linux operating system
 \end{itemize}
@@ -113,21 +112,21 @@ Some of the limitations of clusters are:
 \frametitle{Summary of Yale Clusters}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-& \textbf{Omega} & \textbf{Grace}& \textbf{Louise} & \textbf{Bulldogn} \\
+& \textbf{Omega} & \textbf{Grace}& \textbf{Louise/Farnam} & \textbf{Ruddle} \\
 \hline
 \textbf{Role} & FAS & FAS & LS/Med & YCGA  \\
 \hline
-\textbf{Total nodes} & 1028 & 216 & 321 & 165  \\
+\textbf{Total nodes} & 1028 & 216 & 115+ & 156+  \\
 \hline
-\textbf{Cores/node} & 8 & 20 & 4-64 & 8-64 \\
+\textbf{Cores/node} & 8 & 20 & mostly 20  & mostly 20 \\
 \hline
-\textbf{Mem/node} & 36 GB/48 GB & 128 GB & 16-512 GB & 48-512 GB  \\
+\textbf{Mem/node} & 36 GB/48 GB & 128 GB & 128-1500GB  \\
 \hline
-\textbf{Network} & QDR IB & FDR IB& 1-10 Gb EN & 1-10 Gb EN  \\
+\textbf{Network} & QDR IB & FDR IB& 10 Gb EN  \\
 \hline
-\textbf{File system} & Lustre & GPFS & NAS (GPFS) & NAS (GPFS) \\
+\textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS \\
 \hline
-\textbf{Batch queueing} & Torque & LSF & Torque & Torque \\
+\textbf{Batch queueing} & Torque & LSF & Slurm & Torque/Slurm \\
 \hline
 \end{tabular}
 
@@ -158,17 +157,16 @@ If you need help setting up or using ssh, send an email to: \url{hpc@yale.edu}.
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sshing to Bulldogn}
+\frametitle{Sshing to Ruddle}
 
 \begin{itemize}
-\item Bulldogn has an additional level of ssh security, using Multi Factor Authentication (MFA)
+\item Ruddle has an additional level of ssh security, using Multi Factor Authentication (MFA)
 \item We use Duo, the same MFA as other secure Yale sites
-\item See http://its.yale.edu/services/web-and-application-services/iam-authentication-services/multifactor-authentication-mfa-duo
 \end{itemize}
 
 Example:
 \begin{verbatim}
-bjornson@debian:~$ ssh rdb9@bulldogn.hpc.yale.edu
+bjornson@debian:~$ ssh rdb9@ruddle.hpc.yale.edu
 Enter passphrase for key '/home/bjornson/.ssh/id_rsa': 
 Duo two-factor login for rdb9
 
@@ -186,18 +184,43 @@ Success. Logging you in...
 \begin{frame}[fragile]
 \frametitle{Running jobs on a cluster}
 
-Regardless of the queuing system, there are two general methods to run jobs: interactive and batch.
+Two ways to run jobs on a cluster:
+
+Interactive:
+\begin{itemize}
+\item you request an allocation
+\item system grants you one or more nodes
+\item you are logged onto one of those nodes
+\item you run commands
+\item you exit and system automatically releases nodes
+\end{itemize}
+
+Batch:
+\begin{itemize}
+\item you write a job script containing commands
+\item you request an allocation
+\item system grants you one or more nodes
+\item your script is automatically run on one of the nodes
+\item your script terminates and system releases nodes
+item system sends a notification via email
+\end{itemize}
 
 \vskip10pt
-Interactive jobs are like a remote session.  You are allocated a node or nodes, and are logged into the node.  You
-run whatever commands you like, and then release the node.  Interactive jobs are typically used for development, debugging, or 
+Interactive jobs:
+\begin{itemize}
+\item like a remote session.  
+\item require an active connection
+\item typically used for development, debugging, or 
 interactive environments like R and Matlab. 
-
+\end{itemize}
 \vskip10pt
-Batch jobs are non-interactive.  You create a script that describes the job you want to run and 
-the resources it requires.  You submit the script, and the system finds appropriate resources and runs without
-your participation.  When the job finishes, you are alerted.  Batch jobs are best for production computing.
 
+Batch jobs:
+\begin{itemize}
+\item non-interactive.  
+\item can run many simultaneously
+\item your best choice for production computing
+\end{itemize}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -234,6 +257,18 @@ c01n01$ module load Apps/R/3.0.3
 c01n01$ R  --slave -f compute.R
 c01n01$ exit 
 login-0-0$ 
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Slurm: Example of an interactive job}
+\begin{verbatim}
+farnam-0:~ $ srun --pty bash
+c01n01$ module load Apps/R
+c01n01$ R --slave -f compute.R
+c01n01$ exit
+farnam-0:~ $
 \end{verbatim}
 \end{frame}
 
@@ -294,7 +329,7 @@ R --slave -f compute.R
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Example of a non-interactive/batch job (LSF)}
+\frametitle{Example of a batch job (LSF)}
 \begin{verbatim}
 laptop$ ssh sw464@grace.hpc.yale.edu
 Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
@@ -310,6 +345,40 @@ Note that ``batch.sh'' was specified via input redirection.
 This is required when using BSUB directives in the script,
 otherwise the directives will be ignored.
 \end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Slurm: Example of a batch script}
+Here is a very simple batch script that executes an R script.
+It can contain SBATCH directives that embed sbatch options
+in the script itself, making it easier to submit.  These options
+can be overridden by the command line arguments, however.
+\begin{block}{}
+\begin{verbatim}
+#!/bin/bash
+#SBATCH -p debug 
+#SBATCH -n 20 -N 1
+#SBATCH -t 00:30:00  
+#SBATCH -J testjob
+
+module load Apps/R
+R --slave -f compute.R
+\end{verbatim}
+\end{block}{}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Slurm: Example of a batch job}
+\begin{verbatim}
+farnam-0:working $ sbatch test.sh
+Submitted batch job 18
+\end{verbatim}
+\vskip14pt
+The script runs in the current directory.  
+Output goes to slurm-\textit{jobid}.out by default, or use -o
+\end{frame}
+
 
 %----------- advanced slides ----------------------------------------%
 
@@ -348,7 +417,7 @@ From a Mac or Linux machine, you simply use the \textbf{ssh} command:
 laptop$ ssh netid@omega.hpc.yale.edu
 laptop$ ssh netid@grace.hpc.yale.edu
 laptop$ ssh netid@louise.hpc.yale.edu
-laptop$ ssh netid@bulldogn.hpc.yale.edu
+laptop$ ssh netid@ruddle.hpc.yale.edu
 \end{verbatim}
 
 From a Windows machine, you can choose from programs such as PuTTY or
@@ -362,7 +431,7 @@ For more information on using PuTTY (and WinSCP), go to:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}
-\frametitle{Summary of Torque commands (Omega/Louise/Bulldogn)}
+\frametitle{Summary of Torque commands (Omega/Louise/Ruddle)}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Description} & \textbf{Command} \\
@@ -602,31 +671,19 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 
 %----------- slide --------------------------------------------------%
 \begin{frame}
-\frametitle{BulldogN Queues}
-The default queue on Louise is \textbf{default}, but you can specify
-a different queue via the qsub \textbf{-q} argument.
+\frametitle{Ruddle Queues}
+The default queue on Ruddle is \textbf{default}, but you can specify
+a different queue via the qsub \textbf{-q} argument.  Interactive jobs
+must be submitted to the interactive queue.
 
 \begin{itemize}
-\item All BulldogN jobs have a default walltime limit of 30 days.  
-\item Most BulldogN users use the default queue.  
+\item Interactive jobs have max walltime of 24 hours
+\item Batch jobs have default 7 days, max 30 days.
+\item Interactive queue: max 20 cores/user
+\item Batch queue: max 100 cores/user
 \item Bigmem queue is for jobs requiring large amounts of RAM.
-\item BulldogN has 3 different nodes types, ranging from 8-64 cores, and 48-512 GB of RAM.  
-Default queue jobs run on 8 and 16 core nodes.
-Use -W PARTITION:\textit{type} to select a specific type. 
 \end{itemize}
 
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}
-\frametitle{BulldogN Queue Rules}
-
-\begin{description}
-\item[default] limit of 10 jobs and 100 cores per user.
-\item[bigmem]  64 core/512 GB nodes. Two nodes per user max.
-
-\end{description}
- 
 See \url{http://research.computing.yale.edu/bulldogn\#queues} for more information.
 
 \end{frame}
@@ -634,7 +691,8 @@ See \url{http://research.computing.yale.edu/bulldogn\#queues} for more informati
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Module files}
-Much of the HPC software on the FAS clusters is installed in non-standard
+Much of the HPC software on Omega, Grace, Ruddle, (and Farnam) 
+is installed in non-standard
 locations. This makes it easier to to maintain different versions of the same
 software allowing users to specify the version of an application that
 they wish to use.  This is done with the module command.
@@ -679,24 +737,20 @@ login-0-0$ module avail
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Grace: Finding module files}
+\frametitle{Grace, Ruddle, Farnam: Finding module files}
 There are many module files for the various applications, tools, and
-libraries installed on the FAS clusters.  To find the module file that
-will allow you to run Matlab, use the `module spider` command:
+libraries installed on thw clusters.  To find the module file that
+will allow you to run Bowtie, use the `module avail` command:
 
 \begin{verbatim}
-grace1$ module spider matlab
-----------------------------------------------------------------------------
-  Apps/Matlab:
-----------------------------------------------------------------------------
-     Versions:
-        Apps/Matlab/R2013b
-        Apps/Matlab/R2014a
+[rdb9@grace0 ~]$ module avail matlab
 
-  To find detailed information about Apps/Matlab please enter the full name.
-  For example:
+---------------------------------------------------------------- /gpfs/apps/hpc/Modules ----------------------------------------------------------------
+   Apps/Matlab/R2013b    Apps/Matlab/R2014a    Apps/Matlab/R2015a (D)    Apps/Matlab/R2015b    MatlabPkg/SPM/8    MatlabPkg/SPM/12 (D)
 
-     $ module spider Apps/Matlab/R2014a
+  Where:
+   (D):  Default Module
+
 \end{verbatim}
 
 You can get a listing of all available module files with:
@@ -708,16 +762,21 @@ grace1$ module avail
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Example ``module load'' commands}
-Here are some ``module load'' commands for scripting languages
-installed on both Omega and Grace:
+Here are some ``module load'' commands for scripting languages:
 
 \begin{verbatim}
-module load Langs/Python/2.7.6
-module load Langs/Perl/5.14.2
-module load Apps/R/3.0.3
-module load Apps/Matlab/R2014a
-module load Apps/Mathematica/9.0.1
+module load Langs/Python
+module load Langs/Perl
+module load Apps/R
+module load Apps/Matlab
+module load Apps/Mathematica
 \end{verbatim}
+
+You can specify a specific version:
+\begin{verbatim}
+module load Langs/Python/2.7.6
+\end{verbatim}
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -780,7 +839,7 @@ grace1$ bsub -XF -Is -q interactive bash
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Cluster Filesystems}\
+\frametitle{Cluster Filesystems}
 Each cluster has a number of different filesystems for you to use, with different
 rules and performance characteristics.  
 
@@ -972,7 +1031,7 @@ doing standard analyses:
 \begin{frame}[fragile]
 \frametitle{Wait, where is the Parallelism?}
 
-Qsub or Bsub can allocate multiple nodes, but the script runs on one sequentially.  How do we use multiple cpus?
+Qsub or Bsub can allocate multiple nodes, but the script runs on one core on one node sequentially.  How do we use multiple cpus?
 
 \begin{itemize}
 \item Submit many batch jobs simultaneously (not good)
@@ -1019,15 +1078,16 @@ cd ~/mydir/myrun; prog arg1 arg2 -o job2.out
 \begin{verbatim}
 # Louise:
 /path/to/sqPBS.py queue Nodes Account Title jobs.list > run.sh
-# Omega and Grace:
+# Omega, Grace, Ruddle, Farnam:
 module load Tools/SimpleQueue
 sqCreateScript -q queuename -n 4 jobs.list > run.sh
 \end{verbatim}
 
 \item Submit launch script
 \begin{verbatim}
-qsub run.sh    # Louise and Omega
+qsub run.sh    # Louise, Omega, Ruddle
 bsub < run.sh  # Grace
+sbatch run.sh  # Farnam
 \end{verbatim}
 \end{enumerate}
 
