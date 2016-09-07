@@ -5,6 +5,10 @@
 \useoutertheme{infolines}
 \useinnertheme[shadow=true]{rounded}
 
+\newcommand\tinyfont{\fontsize{4pt}{7.2}\selectfont}
+\newcommand\smallfont{\fontsize{8pt}{7.2}\selectfont}
+\newcommand\regfont{\fontsize{10pt}{7.2}\selectfont}
+
 \usepackage{multimedia}
 
 \title{Using the Yale HPC Clusters}
@@ -39,15 +43,17 @@
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{What is the Yale Center for Research Computing?}
 
 \begin{itemize}
-\item Newly created Center to support your research computing needs.
-\item Applications specialists and system engineers.
+\item Specifically created to support your research computing needs
+\item \textasciitilde 15 staff, including applications specialists and system engineers
 \item Available to consult with and educate users
-\item Manage compute clusters
+\item Manage compute clusters and support users
+\item Located at 160 St. Ronan st, at the corner of Edwards and St. Ronan
 \end{itemize}
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -65,12 +71,12 @@ The CPU used in clusters may be similar to the CPU in your
 desktop computer, but in other respects they are rather different.
 
 \begin{itemize}
+\item Linux operating system
+\item Command line oriented 
 \item Many cores (cpus) per node
 \item No monitors, no CD/DVD drives, no audio or video cards
-\item Don't always have a local hard drive
 \item Very large distributed file system(s)
-\item Usually connected internally by a fast network
-\item Linux operating system
+\item Connected internally by a fast network
 \end{itemize}
 \end{frame}
 
@@ -100,10 +106,9 @@ Some of the limitations of clusters are:
 
 \begin{itemize}
 \item Cannot run Windows programs
+\item Not for persistent services (DBs or web servers)
 \item Not really intended for interactive jobs (especially graphical)
 \item Jobs that run for weeks can be a problem (unless checkpointed)
-\item Most nodes have only a moderate amount of memory
-\item Not for persistent services (DBs or web servers)
 \end{itemize}
 \end{frame}
 
@@ -118,11 +123,11 @@ Some of the limitations of clusters are:
 \hline
 \textbf{Total nodes} & 1028 & 216 & 115+ & 156+  \\
 \hline
-\textbf{Cores/node} & 8 & 20 & mostly 20  & mostly 20 \\
+\textbf{Cores/node} & 8 & 20 & \multicolumn{2}{c}{mostly 20} \\
 \hline
-\textbf{Mem/node} & 36 GB/48 GB & 128 GB & 128-1500GB  \\
+\textbf{Mem/node} & 36 GB/48 GB & 128 GB & \multicolumn{2}{c}{128-1500GB}  \\
 \hline
-\textbf{Network} & QDR IB & FDR IB& 10 Gb EN  \\
+\textbf{Network} & QDR IB & FDR IB& \multicolumn{2}{c}{10 Gb EN}  \\
 \hline
 \textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS \\
 \hline
@@ -205,20 +210,25 @@ Batch:
 item system sends a notification via email
 \end{itemize}
 
-\vskip10pt
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Running jobs on a cluster cont.}
+
 Interactive jobs:
 \begin{itemize}
-\item like a remote session.  
+\item like a remote session
 \item require an active connection
-\item typically used for development, debugging, or 
-interactive environments like R and Matlab. 
+\item for development, debugging, or 
+interactive environments like R and Matlab 
 \end{itemize}
 \vskip10pt
 
 Batch jobs:
 \begin{itemize}
-\item non-interactive.  
-\item can run many simultaneously
+\item non-interactive  
+\item can run many jobs simultaneously
 \item your best choice for production computing
 \end{itemize}
 \end{frame}
@@ -230,7 +240,7 @@ Batch jobs:
 laptop$ ssh sw464@omega.hpc.yale.edu
 Last login: Thu Nov  6 10:48:46 2014 from akw105.cs.yale.internal
 [ snipped ascii art, etc ]
-login-0-0$ qsub -I -q queuename
+login-0-0$ qsub -I -q fas_devel
 qsub: waiting for job 4347393.rocks.omega.hpc.yale.internal to start
 qsub: job 4347393.rocks.omega.hpc.yale.internal ready
 compute-34-15$ cd ~/workdir
@@ -248,7 +258,7 @@ login-0-0$
 laptop$ ssh sw464@grace.hpc.yale.edu
 Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
 [ snipped ascii art, etc ]
-grace1$ bsub -Is -q queuename bash
+grace1$ bsub -Is -q interactive bash
 Job <358314> is submitted to queue.
 <<Waiting for dispatch ...>>
 <<Starting on c01n01>>
@@ -264,7 +274,7 @@ login-0-0$
 \begin{frame}[fragile]
 \frametitle{Slurm: Example of an interactive job}
 \begin{verbatim}
-farnam-0:~ $ srun --pty bash
+farnam-0:~ $ srun -p general --pty bash
 c01n01$ module load Apps/R
 c01n01$ R --slave -f compute.R
 c01n01$ exit
@@ -283,7 +293,7 @@ can be overridden by the command line arguments, however.
 \begin{block}{}
 \begin{verbatim}
 #!/bin/bash
-#PBS -q queuename
+#PBS -q fas_normal
 #PBS -m abe -M stephen.weston@yale.edu
 cd $PBS_O_WORKDIR
 
@@ -296,24 +306,27 @@ R --slave -f compute.R
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Example of a non-interactive/batch job (Torque)}
+\smallfont
 \begin{verbatim}
-laptop$ ssh sw464@omega.hpc.yale.edu
-Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
-[ snipped ascii art, etc ]
-login-0-0$ cd ~/workdir
 login-0-0$ qsub batch.sh
 4348736.rocks.omega.hpc.yale.internal
-login-0-0$ qstat 4348736
+-bash-4.1$ qstat -1 -n 5262300
+\end{verbatim}
+\tinyfont
+\begin{verbatim}
+rocks.omega.hpc.yale.internal: 
+                                                                                  Req'd    Req'd       Elap
+Job ID     Username    Queue    Jobname     SessID  NDS   TSK   Memory   Time    S   Time
+-------    ----------- -------- ----------- ------ ----- ------ ------ --------- - ---------
+5262300    sw464       fas_norm batch.sh    19620   --     --     --   01:00:00 R  00:00:34   compute-34-15/2
+
 \end{verbatim}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Example batch script (LSF)}
-Here is a very simple batch script that executes an R script.
-It can contain BSUB directives that embed bsub options
-in the script itself, making it easier to submit.  These options
-can be overridden by the command line arguments, however.
+The same script in LSF:
 
 \begin{block}{}
 \begin{verbatim}
@@ -330,16 +343,16 @@ R --slave -f compute.R
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Example of a batch job (LSF)}
+\smallfont
 \begin{verbatim}
-laptop$ ssh sw464@grace.hpc.yale.edu
-Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
-[ snipped ascii art, etc ]
-grace1$ cd ~/workdir
-grace1$ bsub < batch.sh
-Job <358314> is submitted to queue <shared>.
-grace1$ bjobs 358314
+[rdb9@grace0 ~]$ bsub < batch.sh
+Job <113409> is submitted to queue <shared>.
+[rdb9@grace0 ~]$ bjobs 113409
+JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
+113409     rdb9    RUN   shared     grace0      c13n12      *name;date Sep  7 11:18
 \end{verbatim}
 
+\regfont
 \vskip14pt
 Note that ``batch.sh'' was specified via input redirection.
 This is required when using BSUB directives in the script,
@@ -349,10 +362,8 @@ otherwise the directives will be ignored.
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Slurm: Example of a batch script}
-Here is a very simple batch script that executes an R script.
-It can contain SBATCH directives that embed sbatch options
-in the script itself, making it easier to submit.  These options
-can be overridden by the command line arguments, however.
+The same script in Slurm:
+
 \begin{block}{}
 \begin{verbatim}
 #!/bin/bash
@@ -370,11 +381,16 @@ R --slave -f compute.R
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Slurm: Example of a batch job}
+\smallfont
 \begin{verbatim}
-farnam-0:working $ sbatch test.sh
-Submitted batch job 18
+$ sbatch test.sh
+Submitted batch job 42
+$ squeue -j 42
+JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   42   general   my_job     rdb9  R       0:03      1 c13n10
 \end{verbatim}
 \vskip14pt
+\regfont
 The script runs in the current directory.  
 Output goes to slurm-\textit{jobid}.out by default, or use -o
 \end{frame}
@@ -385,25 +401,29 @@ Output goes to slurm-\textit{jobid}.out by default, or use -o
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Copy scripts and data to the cluster}
-On Linux and Mac OS/X, I use the standard scp and rsync commands
-to copy scripts and data files from my local machine to the cluster,
-or more specifically, to the login node.
+\begin{itemize}
+\item On Linux and Mac, use scp and rsync
+to copy scripts and data files from between local computer and cluster.
 
 \begin{verbatim}
 laptop$ scp -r ~/workdir netid@omega.hpc.yale.edu:
 laptop$ rsync -av ~/workdir netid@grace.hpc.yale.edu:
 \end{verbatim}
 
-On Windows, the WinSCP application is available from the Yale Software
+\item For Mac, Cyberduck is a good graphical tool.  \url{https://cyberduck.io}
+
+\item For Windows, WinSCP is available from the Yale Software
 Library: \url{http://software.yale.edu}.
 
-\vskip10pt
-Other windows options include:
 
+\item Other windows options include:
 \begin{itemize}
-\item{Bitvise ssh \url{https://www.bitvise.com}}
-\item{Cygwin (Linux emulator in Windows: \url{https://www.cygwin.com}}
+\item Bitvise ssh \url{https://www.bitvise.com}
+\item Cygwin (Linux emulator in Windows: \url{https://www.cygwin.com}
 \end{itemize}
+\end{itemize}
+
+
 
 \end{frame}
 
@@ -417,6 +437,7 @@ From a Mac or Linux machine, you simply use the \textbf{ssh} command:
 laptop$ ssh netid@omega.hpc.yale.edu
 laptop$ ssh netid@grace.hpc.yale.edu
 laptop$ ssh netid@louise.hpc.yale.edu
+laptop$ ssh netid@farnam.hpc.yale.edu
 laptop$ ssh netid@ruddle.hpc.yale.edu
 \end{verbatim}
 
@@ -536,6 +557,62 @@ Examples:
 \begin{verbatim}
 grace1$ bsub -Is -q shared -M 32768 -W 24:00     # 32gb for 1 day
 grace1$ bsub -q long -M 32768 -W 72:00 < job.sh  # 32gb for 3 days
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Summary of Slurm commands (Farnam)}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Description} & \textbf{Command} \\
+\hline
+Submit a batch job & sbatch [\textit{opts}] \textit{SCRIPT} \\
+\hline
+Submit an interactive job & srun --pty [\textit{opts}] \textit{COMMAND} \\
+\hline
+Status of a job & squeue -j \textit{JOBID} \\
+\hline
+Status of a user's jobs & squeue -u \textit{NETID} \\
+\hline
+Cancel a job & scancel \textit{JOBID} \\
+\hline
+Get queue info & squeue -p \textit{PART} \\
+\hline
+Get node info & sinfo -N \\
+\hline
+\end{tabular}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Summary of Slurm sbatch/srun options (Farnam)}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Description} & \textbf{Option} \\
+\hline
+Partiion & -p \textit{QUEUE} \\
+\hline
+Process count & -n \textit{Cpus} \\
+\hline
+Node count & -N \textit{Nodes} \\
+\hline
+Wall clock limit & -t \textit{HH}:\textit{MM} \\
+\hline
+Memory limit & --mem-per-cpu \textit{M} (MB)\\
+\hline
+Interactive job & srun --pty bash \\
+\hline
+Job name & -J \textit{NAME} \\
+\hline
+\end{tabular}
+
+\vskip10pt
+Examples:
+\smallfont
+\begin{verbatim}
+farnam1$ srun --pty -p general --mem-per-cpu 32768 -t 24:00 bash # 32gb for 1 day
+farnam1$ sbatch -p general --mem-per-cpu 32768 -t 72:00 job.sh   # 32gb for 3 days
 \end{verbatim}
 \end{frame}
 
@@ -671,6 +748,24 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 
 %----------- slide --------------------------------------------------%
 \begin{frame}
+\frametitle{Farnam Queues}
+The default queue (partition) on Farnam is \textbf{general}, but you can specify
+a different queue via the \textbf{-p} argument.
+
+\begin{itemize}
+\item Interactive jobs have max walltime of 24 hours
+\item Batch jobs have default 7 days, max 30 days.
+\item Interactive queue: max 4 cores/user
+\item Batch queue: max 100 cores/use
+\item Scavenge queue: max 100 cores/use
+\item GPU queue: 1 day default, max 7 days.
+\item Bigmem queue is for jobs requiring large amounts of RAM.
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
 \frametitle{Ruddle Queues}
 The default queue on Ruddle is \textbf{default}, but you can specify
 a different queue via the qsub \textbf{-q} argument.  Interactive jobs
@@ -691,7 +786,7 @@ See \url{http://research.computing.yale.edu/bulldogn\#queues} for more informati
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Module files}
-Much of the HPC software on Omega, Grace, Ruddle, (and Farnam) 
+Much of the HPC software on Omega, Grace, Ruddle, and Farnam 
 is installed in non-standard
 locations. This makes it easier to to maintain different versions of the same
 software allowing users to specify the version of an application that
@@ -702,7 +797,7 @@ For example, before you can execute Matlab, you need to initialize your
 environment by loading a Matlab ``module file'':
 
 \begin{verbatim}
-$ module load Apps/Matlab/R2012b
+$ module load Apps/Matlab
 \end{verbatim}
 
 This will modify variables in your environment such as PATH and
@@ -1116,7 +1211,7 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 
 \begin{itemize}
 \item Use top or /usr/bin/time -a to monitor usage
-\item Consider using -lmem=\#gb, or allocate entire node with -lnodes=\#:ppn=\#
+\item Consider using memory option when submitting or allocate entire node.
 \end{itemize}
 
 \item Be considerate!  Clusters are shared resources.
