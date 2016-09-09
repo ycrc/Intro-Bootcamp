@@ -10,6 +10,7 @@
 \newcommand\regfont{\fontsize{10pt}{7.2}\selectfont}
 
 \usepackage{multimedia}
+\usepackage{pdfpages}
 
 \title{Using the Yale HPC Clusters}
 \titlegraphic{\includegraphics[height=2.0cm]{../logo.png}}
@@ -26,6 +27,14 @@
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
   \titlepage
+\end{frame}
+
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+
+\includepdf[pages={1}]{rosetta.pdf}
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -231,6 +240,20 @@ Batch jobs:
 \item can run many jobs simultaneously
 \item your best choice for production computing
 \end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{Interactive allocations}
+
+\begin{verbatim}
+Torque: qsub -I -q fas_devel
+LSF:    bsub -Is -q interactive bash
+Slurm:  srun -p general --pty bash
+\end{verbatim}
+
+You'll be logged into a compute node and can run your commands
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -732,54 +755,62 @@ long jobs can run.
 %----------- slide --------------------------------------------------%
 \begin{frame}
 \frametitle{Louise Queues}
-The default queue on Louise is \textbf{general}, but you can specify
-a different queue via the qsub \textbf{-q} argument.
 
 \begin{itemize}
-\item All Louise jobs have a default walltime limit of 30 days.  
-\item Most Louise users use the general queue.  Specific PI groups have purchased dedicated nodes, and have 
-queues of their own.  Those nodes, when idle, are available to all users via the scavenge queue.  
-\item Jobs on the scavenge queue are subject to immediate termination without warning if the owner needs them.
 \item Louise has 5 different nodes types, ranging from 4-64 cores, and 16-512 GB of RAM.  General queue jobs may be run on any
 of these node types.  Use -W PARTITION:\textit{type} to select a specific type. 
 \end{itemize}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
+\hline
+\textbf{general} & 30/30 &  10/64 & default \\
+\hline
+\textbf{scavenge} & 30/30 &  4/320 & preemptable \\
+\hline
+\textbf{\textit{PI}} & none & none & members only \\
+\hline
+\end{tabular}
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}
-\frametitle{Farnam Queues}
-The default queue (partition) on Farnam is \textbf{general}, but you can specify
-a different queue via the \textbf{-p} argument.
 
-\begin{itemize}
-\item Interactive jobs have max walltime of 24 hours
-\item Batch jobs have default 7 days, max 30 days.
-\item Interactive queue: max 4 cores/user
-\item Batch queue: max 100 cores/use
-\item Scavenge queue: max 100 cores/use
-\item GPU queue: 1 day default, max 7 days.
-\item Bigmem queue is for jobs requiring large amounts of RAM.
-\end{itemize}
+\frametitle{Farnam Queues}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
+\hline
+\textbf{general} & 7/30 &  10/100 & default \\
+\hline
+\textbf{interactive} & 1/1 &  4/4 &  \\
+\hline
+\textbf{bigmem} & 7/30 & ?/? & 1.5TB RAM \\
+\hline
+\textbf{gpu} & ?/? & ?/? & 2 GPUS/node \\
+\hline
+\end{tabular}
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}
 \frametitle{Ruddle Queues}
-The default queue on Ruddle is \textbf{default}, but you can specify
-a different queue via the qsub \textbf{-q} argument.  Interactive jobs
-must be submitted to the interactive queue.
 
-\begin{itemize}
-\item Interactive jobs have max walltime of 24 hours
-\item Batch jobs have default 7 days, max 30 days.
-\item Interactive queue: max 20 cores/user
-\item Batch queue: max 100 cores/user
-\item Bigmem queue is for jobs requiring large amounts of RAM.
-\end{itemize}
-
-See \url{http://research.computing.yale.edu/bulldogn\#queues} for more information.
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
+\hline
+\textbf{default} & 7/30 &  10/100 & default \\
+\hline
+\textbf{interactive} & 1/1 &  10/64 &  \\
+\hline
+\textbf{bigmem} & 7/30 & ?/? & 1.5TB RAM \\
+\hline
+\end{tabular}
 
 \end{frame}
 
