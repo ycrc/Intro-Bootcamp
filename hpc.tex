@@ -263,13 +263,15 @@ Batch jobs:
 
 \begin{verbatim}
 
-Torque: qsub -I -q fas_devel
-LSF:    bsub -Is -q interactive bash
-Slurm:  srun -p general --pty bash
+Torque (omega) : qsub -I -q fas_devel
+Torque (louise): qsub -I -q general 
+LSF    (grace) : bsub -Is -q interactive bash
+Slurm  (farnam): srun -p general --pty bash
 
 \end{verbatim}
 
-You'll be logged into a compute node and can run your commands.
+You'll be logged into a compute node and can run your commands. To exit,
+type exit or ctrl-d
 
 \end{frame}
 
@@ -645,8 +647,8 @@ farnam1$ sbatch -p general --mem-per-cpu 32768 -t 72:00 job.sh   # 32gb for 3 da
 
 To specify 16 cores with 20 GB each:  
 \begin{verbatim}
-Torque: qsub -lnodes=2:ppn=8 -lmem=180GB t.sh
-LSF: bsub -n 16 -R 20000 -M 20000 t.sh
+Torque: qsub -lnodes=2:ppn=8 -lmem=180gb t.sh
+LSF: bsub -n 16 -M 20000 t.sh
 Slurm: sbatch -n 16 --mem-per-cpu=20000 t.sh
 
 \end{verbatim}
@@ -665,7 +667,7 @@ Slurm: sbatch -n 16 --mem-per-cpu=20000 t.sh
 To specify walltime limit of 2 days:
 \begin{verbatim}
 Torque: qsub -lwalltime=2:00:00:00 t.sh
-LSF: bsub -W 2:00:00 t.sh
+LSF: bsub -W 48:00 t.sh
 Slurm: sbatch -t 2:00:00 t.sh
 
 \end{verbatim}
@@ -742,7 +744,10 @@ Regardless of which cluster you are on, you will submit jobs to a particular que
 \item{Queue rules}
 \end{itemize}
 
-Each cluster has its own queues, with specific rules.  We detail them in the following slides.
+Each cluster has its own queues, with specific rules, such as maximum walltime, cores, nodes, jobs, etc.  
+We detail them in the following slides.
+\vspace{0.1in}
+
 
 \end{frame}
 
@@ -795,7 +800,7 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 
 \begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
+\textbf{Queue} & \textbf{Walltime def/max (days)}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
 \hline
 \textbf{general} & 30/30 &  10/64 & default \\
 \hline
@@ -814,15 +819,19 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 
 \begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
+\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX cpus} & \textbf{Notes} \\
 \hline
-\textbf{general} & 7/30 &  10/100 & default \\
+\textbf{general} & 7/30 &  100 & default \\
 \hline
-\textbf{interactive} & 1/1 &  4/4 &  \\
+\textbf{interactive} & 1/1 & 4 &  \\
 \hline
-\textbf{bigmem} & 7/30 & ?/? & 1.5TB RAM \\
+\textbf{bigmem} & 1/7 & 64 & 1.5TB RAM \\
 \hline
-\textbf{gpu} & ?/? & ?/? & 2 GPUS/node \\
+\textbf{gpu} & 1/7 & TBD & 2 GPUS/node \\
+\hline
+\textbf{scavenge} & 1/30 & 200 & preemptable \\
+\hline
+\textbf{textit{PI}} & 1/7 & N/A & members only \\
 \hline
 \end{tabular}
 
@@ -834,13 +843,13 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 
 \begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
+\textbf{Queue} & \textbf{Walltime def/max}& \textbf{MAX cpus} & \textbf{Notes} \\
 \hline
-\textbf{default} & 7/30 &  10/100 & default \\
+\textbf{default} & 7/30 &  300 & default \\
 \hline
-\textbf{interactive} & 1/1 &  10/64 &  \\
+\textbf{interactive} & 1/1 & 20 &  \\
 \hline
-\textbf{bigmem} & 7/30 & ?/? & 1.5TB RAM \\
+\textbf{bigmem} & 7/30 & 64 & 1.5TB RAM \\
 \hline
 \end{tabular}
 
@@ -963,6 +972,27 @@ compute-20-1$ R --help
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
+\frametitle{Running graphical programs on compute nodes}
+Two different ways:
+\begin{itemize}
+\item X11 forwarding
+\begin{itemize}
+\item easy setup
+\item ssh -Y to cluster, then qsub -Y/bsub -XF/srun --x11
+\item works fine for most applications
+\item bogs down for very rich graphics
+\end{itemize}
+\item Remote desktop (VNC)
+\begin{itemize}
+\item more setup
+\item allocate node, start VNC server there, connect via ssh tunnels
+\item works very well for rich graphics
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Running graphical programs (Torque)}
 Enable X11 forwarding from ssh and qsub:
 \begin{verbatim}
@@ -986,7 +1016,7 @@ where ``compute-XX-YY'' is the node allocated to your job.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Running graphical programs (LSF)}
 Enable X11 forwarding from ssh and bsub:
 \begin{verbatim}
@@ -1154,7 +1184,7 @@ $ gunzip -c test.export.txt.gz \
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Genome references installed on cluster}
+\frametitle{Genome references installed on Ruddle}
 
 Please do not install your own copies of popular files (e.g. genome refs).  
 \vskip10pt
@@ -1220,6 +1250,33 @@ Advantages
 
 \end{frame}
 
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Job Arrays}
+
+\begin{itemize}
+\item Useful when you have many nearly identical, independent jobs to run
+\item Starts many copies of your script, distinquished by a task id.
+\end{itemize}
+
+Submit jobs like this:
+\begin{verbatim}
+Torque: qsub -t 1-100 ...
+Slurm: sbatch --array=1-100 ..
+LSF: bsub -J "job [1-100]" ...
+\end{verbatim}
+
+Script references an environment variable:
+\begin{verbatim}
+#PBS -t 1-10
+
+cd $PBS_O_WORKDIR
+
+./mycommand -i input.${PBS_ARRAYID} \
+    -o output.${PBS_ARRAYID}
+\end{verbatim}
+Other BQS are similar
+\end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
