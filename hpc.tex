@@ -29,14 +29,6 @@
   \titlepage
 \end{frame}
 
-
-%----------- slide --------------------------------------------------%
-\begin{frame}
-
-\includepdf[pages={1}]{rosetta.pdf}
-
-\end{frame}
-
 %----------- slide --------------------------------------------------%
 \begin{frame}
 \frametitle{To get help}
@@ -73,7 +65,7 @@ A cluster usually consists of a hundred to a thousand rack mounted
 computers, called \textbf{nodes}.  It has one or two login nodes
 that are externally accessible, but most of the nodes are
 compute nodes and are only accessed from a login node via a
-batch queueing system, also called a \textbf{job scheduler}.
+batch queueing system (BQS), also called a \textbf{job scheduler}.
 
 \vskip10pt
 The CPU used in clusters may be similar to the CPU in your
@@ -171,6 +163,29 @@ If you need help setting up or using ssh, send an email to: \url{hpc@yale.edu}.
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
+\frametitle{Ssh to a login node}
+To access any of the clusters, you must use \textbf{ssh}.
+From a Mac or Linux machine, you simply use the \textbf{ssh} command:
+
+\begin{verbatim}
+laptop$ ssh netid@omega.hpc.yale.edu
+laptop$ ssh netid@grace.hpc.yale.edu
+laptop$ ssh netid@louise.hpc.yale.edu
+laptop$ ssh netid@farnam.hpc.yale.edu
+laptop$ ssh netid@ruddle.hpc.yale.edu
+\end{verbatim}
+
+From a Windows machine, you can choose from programs such as PuTTY or
+X-Win32, both of which are available from the Yale Software Library:
+\url{http://software.yale.edu}..
+
+\vskip10pt
+For more information on using PuTTY (and WinSCP), go to:
+\url{http://research.computing.yale.edu/faq\#ssh}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
 \frametitle{Sshing to Ruddle}
 
 \begin{itemize}
@@ -243,16 +258,18 @@ Batch jobs:
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Interactive allocations}
 
 \begin{verbatim}
+
 Torque: qsub -I -q fas_devel
 LSF:    bsub -Is -q interactive bash
 Slurm:  srun -p general --pty bash
+
 \end{verbatim}
 
-You'll be logged into a compute node and can run your commands
+You'll be logged into a compute node and can run your commands.
 
 \end{frame}
 
@@ -451,29 +468,6 @@ Library: \url{http://software.yale.edu}.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Ssh to a login node}
-To access any of the clusters, you must use \textbf{ssh}.
-From a Mac or Linux machine, you simply use the \textbf{ssh} command:
-
-\begin{verbatim}
-laptop$ ssh netid@omega.hpc.yale.edu
-laptop$ ssh netid@grace.hpc.yale.edu
-laptop$ ssh netid@louise.hpc.yale.edu
-laptop$ ssh netid@farnam.hpc.yale.edu
-laptop$ ssh netid@ruddle.hpc.yale.edu
-\end{verbatim}
-
-From a Windows machine, you can choose from programs such as PuTTY or
-X-Win32, both of which are available from the Yale Software Library:
-\url{http://software.yale.edu}..
-
-\vskip10pt
-For more information on using PuTTY (and WinSCP), go to:
-\url{http://research.computing.yale.edu/faq\#ssh}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
 \begin{frame}
 \frametitle{Summary of Torque commands (Omega/Louise/Ruddle)}
 \begin{tabular}{|l|l|}
@@ -640,7 +634,45 @@ farnam1$ sbatch -p general --mem-per-cpu 32768 -t 72:00 job.sh   # 32gb for 3 da
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}[fragile]
+\frametitle{Controlling memory usage}
+\begin{itemize}
+\item It's crucial to understand memory required by your program.
+\item Nodes (and thus memory) are often shared
+\item Jobs have default memory limits that you can override
+\item Each BQS specifies this differently
+\end{itemize}
+
+To specify 16 cores with 20 GB each:  
+\begin{verbatim}
+Torque: qsub -lnodes=2:ppn=8 -lmem=180GB t.sh
+LSF: bsub -n 16 -R 20000 -M 20000 t.sh
+Slurm: sbatch -n 16 --mem-per-cpu=20000 t.sh
+
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Controlling walltime}
+\begin{itemize}
+\item Each job has a default maximum walltime
+\item The job is killed if that is exceeded
+\item You can specify longer walltime to prevent being killed
+\item You can specify shorter walltime to get resources faster
+\end{itemize}
+
+To specify walltime limit of 2 days:
+\begin{verbatim}
+Torque: qsub -lwalltime=2:00:00:00 t.sh
+LSF: bsub -W 2:00:00 t.sh
+Slurm: sbatch -t 2:00:00 t.sh
+
+\end{verbatim}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}<presentation:0>
 \frametitle{Grace: Notes on memory limits}
 The \textbf{-M} option specifies the maximum memory per core in
 megabytes.
@@ -655,7 +687,7 @@ The default value is 5120, or 5 gigabytes per node.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Omega: Requesting walltime with qsub}
 The value of \textbf{walltime} is particularly important because if you
 ask for too little time, your job will be killed, but if you ask for too
@@ -678,7 +710,7 @@ less critical.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Grace: Requesting walltime with bsub}
 You should use the bsub \textbf{-W} option to specify the maximum time
 needed by your job. If you exceed this time, your job will be killed.
@@ -931,7 +963,7 @@ compute-20-1$ R --help
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Omega: Notes on interactive mode}
+\frametitle{Running graphical programs (Torque)}
 Enable X11 forwarding from ssh and qsub:
 \begin{verbatim}
 laptop$ ssh -Y netid@omega.hpc.yale.edu
@@ -955,7 +987,7 @@ where ``compute-XX-YY'' is the node allocated to your job.
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Grace: Notes on interactive mode}
+\frametitle{Running graphical programs (LSF)}
 Enable X11 forwarding from ssh and bsub:
 \begin{verbatim}
 laptop$ ssh -Y netid@grace.hpc.yale.edu
@@ -1286,6 +1318,7 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 \begin{itemize}
 \item Please feel free to contact us.
 \item Online documentation: \url{http://research.computing.yale.edu/hpc}
+\item Very useful table of equivalent BQS commands: https://slurm.schedmd.com/rosetta.pdf
 \item Recommended Books
 \begin{itemize}
 \item Learning Python: Mark Lutz
