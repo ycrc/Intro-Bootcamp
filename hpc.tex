@@ -15,12 +15,12 @@
 \title{Using the Yale HPC Clusters}
 \titlegraphic{\includegraphics[height=2.0cm]{../logo.png}}
 \logo{\includegraphics[height=0.5cm]{../logo.png}}
-\author{{Stephen Weston} \and {Robert Bjornson}}
+\author{{Robert Bjornson}}
 \institute[Yale]{
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Sep 2016}
+\date{Dec 2016}
 \begin{document}
 
 
@@ -30,29 +30,18 @@
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
-\frametitle{To get help}
-\begin{itemize}
-\item Send an email to: \url{hpc@yale.edu}
-\item Read documentation at: \url{http://research.computing.yale.edu/hpc-support}
-\item Email us directly:
-\begin{itemize}
-\item Stephen.weston@yale.edu, Office hours at CSSSI on Wednesday morning from 9 to 12 or by appointment
-\item Robert.bjornson@yale.edu, By appointment
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{What is the Yale Center for Research Computing?}
 
 \begin{itemize}
-\item Specifically created to support your research computing needs
+\item Independent center under the Provost's office
+\item Created to support your research computing needs
+\item Focus is on high performance computing and storage
 \item \textasciitilde 15 staff, including applications specialists and system engineers
 \item Available to consult with and educate users
 \item Manage compute clusters and support users
 \item Located at 160 St. Ronan st, at the corner of Edwards and St. Ronan
+\item http://research.computing.yale.edu
 \end{itemize}
 
 \end{frame}
@@ -61,11 +50,11 @@
 \begin{frame}
 \frametitle{What is a cluster?}
 
-A cluster usually consists of a hundred to a thousand rack mounted
-computers, called \textbf{nodes}.  It has one or two login nodes
+A \textbf{cluster} usually consists of a hundred to a thousand rack mounted
+computers, called \textbf{nodes}.  It has one or two \textbf{login nodes}
 that are externally accessible, but most of the nodes are
 compute nodes and are only accessed from a login node via a
-batch queueing system (BQS), also called a \textbf{job scheduler}.
+\textbf{batch queueing system} (BQS).
 
 \vskip10pt
 The CPU used in clusters may be similar to the CPU in your
@@ -106,16 +95,16 @@ Clusters are not the answer to all large scale computing problems.
 Some of the limitations of clusters are:
 
 \begin{itemize}
-\item Cannot run Windows programs
+\item Cannot run Windows or Mac programs
 \item Not for persistent services (DBs or web servers)
-\item Not really intended for interactive jobs (especially graphical)
+\item Not ideal for interactive, graphical tasks
 \item Jobs that run for weeks can be a problem (unless checkpointed)
 \end{itemize}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters}
+\frametitle{Summary of Yale Clusters (Dec 2016)}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 & \textbf{Omega} & \textbf{Grace}& \textbf{Louise/Farnam} & \textbf{Ruddle} \\
@@ -132,7 +121,9 @@ Some of the limitations of clusters are:
 \hline
 \textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS \\
 \hline
-\textbf{Batch queueing} & Torque & LSF & Slurm & Torque/Slurm \\
+\textbf{Batch queueing} & Torque & LSF & Torque/Slurm & Torque \\
+\hline
+\textbf{Duo MFA?} & No & No & No/Yes & Yes \\
 \hline
 \end{tabular}
 
@@ -175,21 +166,31 @@ laptop$ ssh netid@farnam.hpc.yale.edu
 laptop$ ssh netid@ruddle.hpc.yale.edu
 \end{verbatim}
 
-From a Windows machine, you can choose from programs such as PuTTY or
-X-Win32, both of which are available from the Yale Software Library:
-\url{http://software.yale.edu}..
+From a Windows machine we recommend using putty: \url{http://www.putty.org}.
 
 \vskip10pt
-For more information on using PuTTY (and WinSCP), go to:
-\url{http://research.computing.yale.edu/faq\#ssh}
+For more information on using PuTTY see:
+\url{http://research.computing.yale.edu/hpc-support/user-guide/secure-shell-for-microsoft-windows}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sshing to Ruddle}
+\frametitle{Ssh key pairs}
+\begin{itemize}
+\item We use key pairs instead of passwords to log into clusters
+\item Keys are generated as pair: public (id\_rsa.pub) and private (id\_rsa)
+\item You should always use a pass phrase to protect private key!
+\item You can freely give the public key to anyone
+\item NEVER give the private key to anyone!
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Sshing to Farnam and Ruddle}
 
 \begin{itemize}
-\item Ruddle has an additional level of ssh security, using Multi Factor Authentication (MFA)
+\item Farnam and Ruddle have an additional level of ssh security, using Multi Factor Authentication (MFA)
 \item We use Duo, the same MFA as other secure Yale sites
 \end{itemize}
 
@@ -231,14 +232,14 @@ Batch:
 \item system grants you one or more nodes
 \item your script is automatically run on one of the nodes
 \item your script terminates and system releases nodes
-item system sends a notification via email
+\item system sends a notification via email
 \end{itemize}
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Running jobs on a cluster cont.}
+\frametitle{Interactive vs. Batch}
 
 Interactive jobs:
 \begin{itemize}
@@ -265,8 +266,9 @@ Batch jobs:
 
 Torque (omega) : qsub -I -q fas_devel
 Torque (louise): qsub -I -q general 
+Torque (ruddle): qsub -I -q interactive
 LSF    (grace) : bsub -Is -q interactive bash
-Slurm  (farnam): srun -p general --pty bash
+Slurm  (farnam): srun -p interactive --pty bash
 
 \end{verbatim}
 
@@ -410,7 +412,7 @@ The same script in Slurm:
 \begin{verbatim}
 #!/bin/bash
 #SBATCH -p debug 
-#SBATCH -n 20 -N 1
+#SBATCH -c 20 -N 1
 #SBATCH -t 00:30:00  
 #SBATCH -J testjob
 
@@ -452,7 +454,7 @@ laptop$ scp -r ~/workdir netid@omega.hpc.yale.edu:
 laptop$ rsync -av ~/workdir netid@grace.hpc.yale.edu:
 \end{verbatim}
 
-\item For Mac, Cyberduck is a good graphical tool.  \url{https://cyberduck.io}
+\item Cyberduck is a good graphical tool for Mac or Windows.  \url{https://cyberduck.io}
 
 \item For Windows, WinSCP is available from the Yale Software
 Library: \url{http://software.yale.edu}.
@@ -463,6 +465,7 @@ Library: \url{http://software.yale.edu}.
 \item Bitvise ssh \url{https://www.bitvise.com}
 \item Cygwin (Linux emulator in Windows: \url{https://www.cygwin.com}
 \end{itemize}
+\item{Duo (ruddle,farnam) can be difficult with graphical tools}
 \end{itemize}
 
 
@@ -588,7 +591,7 @@ grace1$ bsub -q long -M 32768 -W 72:00 < job.sh  # 32gb for 3 days
 \hline
 Submit a batch job & sbatch [\textit{opts}] \textit{SCRIPT} \\
 \hline
-Submit an interactive job & srun --pty [\textit{opts}] \textit{COMMAND} \\
+Submit an interactive job & srun -p interactive -{}-pty [\textit{opts}] bash  \\
 \hline
 Status of a job & squeue -j \textit{JOBID} \\
 \hline
@@ -610,17 +613,17 @@ Get node info & sinfo -N \\
 \hline
 \textbf{Description} & \textbf{Option} \\
 \hline
-Partiion & -p \textit{QUEUE} \\
+Partition & -p \textit{QUEUE} \\
 \hline
-Process count & -n \textit{Cpus} \\
+Process count & -c \textit{Cpus} \\
 \hline
 Node count & -N \textit{Nodes} \\
 \hline
-Wall clock limit & -t \textit{HH}:\textit{MM} \\
+Wall clock limit & -t \textit{HH}:\textit{MM} or \textit{DD}-\textit{HH}\\
 \hline
 Memory limit & --mem-per-cpu \textit{M} (MB)\\
 \hline
-Interactive job & srun --pty bash \\
+Interactive job & srun -{}-pty bash \\
 \hline
 Job name & -J \textit{NAME} \\
 \hline
@@ -649,7 +652,7 @@ To specify 16 cores with 20 GB each:
 \begin{verbatim}
 Torque: qsub -lnodes=2:ppn=8 -lmem=180gb t.sh
 LSF: bsub -n 16 -M 20000 t.sh
-Slurm: sbatch -n 16 --mem-per-cpu=20000 t.sh
+Slurm: sbatch -n 16 --mem-per-cpu=20G t.sh
 
 \end{verbatim}
 \end{frame}
@@ -668,7 +671,7 @@ To specify walltime limit of 2 days:
 \begin{verbatim}
 Torque: qsub -lwalltime=2:00:00:00 t.sh
 LSF: bsub -W 48:00 t.sh
-Slurm: sbatch -t 2:00:00 t.sh
+Slurm: sbatch -t 2- t.sh
 
 \end{verbatim}
 \end{frame}
@@ -829,9 +832,9 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 \hline
 \textbf{gpu} & 1/7 & TBD & 2 GPUS/node \\
 \hline
-\textbf{scavenge} & 1/30 & 200 & preemptable \\
+\textbf{scavenge} & 1/7 & 200 & preemptable \\
 \hline
-\textbf{textit{PI}} & 1/7 & N/A & members only \\
+\textbf{PI} & 14/14 & N/A & members only \\
 \hline
 \end{tabular}
 
@@ -1037,8 +1040,8 @@ It is very important to understand the differences.  Generally, each cluster wil
 
 \begin{description}
 \item[Home]: Backed up, small quota, for scripts, programs, documents, etc.
-\item[Scratch]: Not Backed up.  Automatically purged.  For temporary files.
-\item[Project]: Not Backed up.  For longer term storage.
+\item[Scratch]: Not backed up.  Automatically purged.  For temporary files.
+\item[Project]: Not backed up.  For longer term storage.
 \item[Local HD]: /tmp  For local scratch files.
 \item[RAMDISK]: /dev/shm For local scratch files.
 \item[Storage@Yale]: University-wide storage (active and archive).
@@ -1051,7 +1054,7 @@ For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Hints for working with YCGA Genomic data}
 \begin{itemize}
 \item Data layout, and avoiding copies
@@ -1062,7 +1065,7 @@ For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Access data directly rather than copying}
 
 You'll typically get an email from YCGA with links:
@@ -1088,7 +1091,7 @@ http://sysg1.cs.yale.edu:2011/gen?fullPath=ba_sequencers5/sequencerX
 
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Access data directly rather than copying}
 
 Instead of downloading them, you can access them directly on the cluster, by (trivially) 
@@ -1109,7 +1112,7 @@ ba_sequencers... -> /ycga-ba/ba_sequencers...
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Access data directly rather than copying (cont)}
 
 Your data is in multiple compressed fastq files, typically in a directory
@@ -1131,7 +1134,7 @@ like Unaligned/Project\_PIname/Sample\_samplename.
 
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Use Links to avoid copying fastq files}
 Many users incur a 2-3x space increase:
 
@@ -1184,21 +1187,18 @@ $ gunzip -c test.export.txt.gz \
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Genome references installed on Ruddle}
+\frametitle{Large datasets (e.g. Genome references}
 
-Please do not install your own copies of popular files (e.g. genome refs).  
-\vskip10pt
-We have a number of references installed here:
-\begin{verbatim}
-/home/bioinfo/genomes
-\end{verbatim}
-
-If you don't find what you need, please ask us, and we will install them.
-
+\begin{itemize}
+\item Please do not install your own copies of popular files (e.g. genome refs).  
+\item We have a number of references installed, and can install others.
+\item For example, on Ruddle: /home/bioinfo/genomes
+\item If you don't find what you need, please ask us, and we will install them.
+\end{itemize}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Bioinformatics Assistance}
 
 Contact Jim Knight (j.knight@yale.edu)
@@ -1219,33 +1219,20 @@ doing standard analyses:
 \begin{frame}[fragile]
 \frametitle{Wait, where is the Parallelism?}
 
-Qsub or Bsub can allocate multiple nodes, but the script runs on one core on one node sequentially.  How do we use multiple cpus?
+Qsub/Bsub/Sbatch can allocate multiple nodes, but the script runs on one core on one node sequentially.  How do we use multiple cpus?
 
+Two classes of parallelism:
+\begin{itemize}
+\item Single job parallelized (somehow)
+\item Lots of independent sequential jobs
+\end{itemize}
+
+Some options:
 \begin{itemize}
 \item Submit many batch jobs simultaneously (not good)
 \item Use job arrays (better)
 \item Submit a parallel version of your program (great if you have one)
 \item Use SimpleQueue (excellent)
-\end{itemize}
-
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{SimpleQueue}
-
-\begin{itemize}
-\item Useful when you have many similar, independent jobs to run
-\item Automatically schedules jobs onto a single PBS allocation
-\end{itemize}
-
-Advantages
-
-\begin{itemize}
-\item Handles startup, shutdown, errors
-\item Only one batch job to keep track of
-\item Keeps track of status of individual jobs
-\item Automatically schedules jobs onto a single PBS allocation
 \end{itemize}
 
 \end{frame}
@@ -1276,6 +1263,26 @@ cd $PBS_O_WORKDIR
     -o output.${PBS_ARRAYID}
 \end{verbatim}
 Other BQS are similar
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{SimpleQueue}
+
+\begin{itemize}
+\item Useful when you have many similar, independent jobs to run
+\item Automatically schedules jobs onto a single PBS allocation
+\end{itemize}
+
+Advantages
+
+\begin{itemize}
+\item Handles startup, shutdown, errors
+\item Only one batch job to keep track of
+\item Keeps track of status of individual jobs
+\item Automatically schedules jobs onto a single PBS allocation
+\end{itemize}
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -1369,12 +1376,21 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{To get help}
+\begin{itemize}
+\item Send an email to: \url{hpc@yale.edu}
+\item Read documentation at: \url{http://research.computing.yale.edu/hpc-support}
+\item Come to office hours: \url{http://research.computing.yale.edu/hpc-support/office-hours-support}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Resources}
 
 \begin{itemize}
-\item Please feel free to contact us.
-\item Online documentation: \url{http://research.computing.yale.edu/hpc}
 \item Very useful table of equivalent BQS commands: https://slurm.schedmd.com/rosetta.pdf
 \item Recommended Books
 \begin{itemize}
