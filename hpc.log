@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.2.23)  5 DEC 2016 17:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.2.23)  30 JAN 2017 14:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1034,7 +1034,7 @@ Package pdftex.def Info: ../logo.png used on input line 212.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 238.
+Package pdftex.def Info: ../logo.png used on input line 225.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [11
 
@@ -1045,7 +1045,7 @@ Package pdftex.def Info: ../logo.png used on input line 238.
 File: ../logo.png Graphic file (type png)
 
 <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 259.
+Package pdftex.def Info: ../logo.png used on input line 251.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [12
 
@@ -1055,9 +1055,30 @@ Package pdftex.def Info: ../logo.png used on input line 259.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 278.
+Package pdftex.def Info: ../logo.png used on input line 272.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [13
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 292.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [14
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 311.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [15
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1071,28 +1092,7 @@ to start[]
 )
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 296.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [14
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 315.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [15
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
-
-<use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 327.
+Package pdftex.def Info: ../logo.png used on input line 329.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [16
 
@@ -1109,15 +1109,11 @@ Package pdftex.def Info: ../logo.png used on input line 348.
 ]
 \openout4 = `hpc.vrb'.
 
- (./hpc.vrb
-
-LaTeX Font Warning: Font shape `OT1/cmtt/m/n' in size <4> not available
-(Font)              size <5> substituted on input line 9.
-
-)
+ (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 368.
+
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 360.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [18
 
@@ -1127,9 +1123,34 @@ Package pdftex.def Info: ../logo.png used on input line 368.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 385.
+Package pdftex.def Info: ../logo.png used on input line 381.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [19
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb
+
+LaTeX Font Warning: Font shape `OT1/cmtt/m/n' in size <4> not available
+(Font)              size <5> substituted on input line 9.
+
+)
+File: ../logo.png Graphic file (type png)
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 401.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [20
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 418.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [21
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1149,28 +1170,7 @@ name;date Sep  7 11:18[]
 )
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 404.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [20
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 423.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [21
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
-
-<use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 440.
+Package pdftex.def Info: ../logo.png used on input line 437.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [22
 
@@ -1180,17 +1180,44 @@ Package pdftex.def Info: ../logo.png used on input line 440.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 473.
+Package pdftex.def Info: ../logo.png used on input line 455.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [23
 
 ]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 472.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [24
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb
+! Missing } inserted.
+<inserted text> 
+                }
+l.24 \end{itemize}
+                  
+? 
+)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 497.
+Package pdftex.def Info: ../logo.png used on input line 506.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [25
 
-[24
+]
+File: ../logo.png Graphic file (type png)
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 530.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [26
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1204,25 +1231,25 @@ job.sh[]
 )
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 528.
+Package pdftex.def Info: ../logo.png used on input line 561.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [25
+ [27
 
 ]
-LaTeX Font Info:    Try loading font information for OML+cmss on input line 550
+LaTeX Font Info:    Try loading font information for OML+cmss on input line 583
 .
-LaTeX Font Info:    No file OMLcmss.fd. on input line 550.
+LaTeX Font Info:    No file OMLcmss.fd. on input line 583.
 
 
 LaTeX Font Warning: Font shape `OML/cmss/m/n' undefined
 (Font)              using `OML/cmm/m/it' instead
-(Font)              for symbol `textless' on input line 550.
+(Font)              for symbol `textless' on input line 583.
 
 File: ../logo.png Graphic file (type png)
 <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 550.
+Package pdftex.def Info: ../logo.png used on input line 583.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [26
+ [28
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1236,16 +1263,16 @@ Overfull \hbox (2.30165pt too wide) in paragraph at lines 29--29
 )
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 583.
+Package pdftex.def Info: ../logo.png used on input line 616.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [27
+ [29
 
 ]
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 607.
+Package pdftex.def Info: ../logo.png used on input line 640.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [28
+ [30
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1259,28 +1286,7 @@ h   # 32gb for 3 days[]
 )
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 639.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [29
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 658.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [30
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
-
-<use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 677.
+Package pdftex.def Info: ../logo.png used on input line 672.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [31
 
@@ -1290,74 +1296,60 @@ Package pdftex.def Info: ../logo.png used on input line 677.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 755.
+Package pdftex.def Info: ../logo.png used on input line 691.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [32
 
 ]
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 774.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+\openout4 = `hpc.vrb'.
 
-[33
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 710.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [33
 
 ]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 793.
+Package pdftex.def Info: ../logo.png used on input line 787.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [34
 
 ]
 
 LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
-(Font)              using `OT1/cmss/bx/n' instead on input line 816.
+(Font)              using `OT1/cmss/bx/n' instead on input line 848.
 
+\openout4 = `hpc.vrb'.
+
+(./hpc.vrb)
 File: ../logo.png Graphic file (type png)
-<use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 816.
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 912.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [35
 
 ]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 841.
+Package pdftex.def Info: ../logo.png used on input line 938.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [36
 
 ]
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 859.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [37
-
-]
 \openout4 = `hpc.vrb'.
 
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 880.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [38
 
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 906.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [39
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb
+(./hpc.vrb
 Overfull \hbox (453.79771pt too wide) in paragraph at lines 15--15
 []\OT1/cmtt/m/n/10 ------------------------------------------------------------
 ---- /gpfs/apps/hpc/Modules ---------------------------------------------------
@@ -1373,9 +1365,9 @@ Overfull \hbox (359.29854pt too wide) in paragraph at lines 15--15
 )
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 930.
+Package pdftex.def Info: ../logo.png used on input line 962.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [40
+ [37
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1383,9 +1375,9 @@ Package pdftex.def Info: ../logo.png used on input line 930.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 950.
+Package pdftex.def Info: ../logo.png used on input line 982.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [41
+ [38
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1394,7 +1386,60 @@ Package pdftex.def Info: ../logo.png used on input line 950.
 File: ../logo.png Graphic file (type png)
 
 <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 974.
+Package pdftex.def Info: ../logo.png used on input line 1006.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [39
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 1027.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [40
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 1086.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [41
+
+]
+Overfull \hbox (7.5516pt too wide) in paragraph at lines 1112--1112
+[]\OT1/cmtt/m/n/10 http://sysg1.cs.yale.edu:2011/showrun?run=ba_sequencers5/seq
+uencerX[] 
+ []
+
+Missing character: There is no â in font cmtt10!
+Missing character: There is no € in font cmtt10!
+Missing character: There is no ¦ in font cmtt10!
+
+Overfull \hbox (12.80156pt too wide) in paragraph at lines 1121--1121
+[]\OT1/cmtt/m/n/10 http://sysg1.cs.yale.edu:2011/gen?fullPath=ba_sequencers5/se
+quencerX[] 
+ []
+
+\openout4 = `hpc.vrb'.
+
+(./hpc.vrb)
+Runaway argument?
+{Large datasets (e.g. Genomes) \par \begin {itemize} \item Please do \ETC.
+! File ended while scanning use of \@xdblarg.
+<inserted text> 
+                \par 
+l.1230 \end{frame}
+                  
+? 
+File: ../logo.png Graphic file (type png)
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 1230.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [42
 
@@ -1404,7 +1449,7 @@ Package pdftex.def Info: ../logo.png used on input line 974.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 995.
+Package pdftex.def Info: ../logo.png used on input line 1270.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [43
 
@@ -1415,75 +1460,19 @@ Package pdftex.def Info: ../logo.png used on input line 995.
 File: ../logo.png Graphic file (type png)
 
 <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1054.
+Package pdftex.def Info: ../logo.png used on input line 1294.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [44
 
 ]
-Overfull \hbox (7.5516pt too wide) in paragraph at lines 1080--1080
-[]\OT1/cmtt/m/n/10 http://sysg1.cs.yale.edu:2011/showrun?run=ba_sequencers5/seq
-uencerX[] 
- []
-
-Missing character: There is no â in font cmtt10!
-Missing character: There is no € in font cmtt10!
-Missing character: There is no ¦ in font cmtt10!
-
-Overfull \hbox (12.80156pt too wide) in paragraph at lines 1089--1089
-[]\OT1/cmtt/m/n/10 http://sysg1.cs.yale.edu:2011/gen?fullPath=ba_sequencers5/se
-quencerX[] 
- []
-
 \openout4 = `hpc.vrb'.
 
-(./hpc.vrb)
+ (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1186.
+Package pdftex.def Info: ../logo.png used on input line 1315.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [45
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1198.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [46
-
-]
-\openout4 = `hpc.vrb'.
-
-
-(./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1238.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [47
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1266.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [48
-
-]
-\openout4 = `hpc.vrb'.
-
-
-(./hpc.vrb)
-File: ../logo.png Graphic file (type png)
- <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1286.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [49
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1497,9 +1486,9 @@ Overfull \hbox (1.30186pt too wide) in paragraph at lines 17--17
 )
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1318.
+Package pdftex.def Info: ../logo.png used on input line 1347.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [50
+ [46
 
 ]
 \openout4 = `hpc.vrb'.
@@ -1507,7 +1496,46 @@ Package pdftex.def Info: ../logo.png used on input line 1318.
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1354.
+Package pdftex.def Info: ../logo.png used on input line 1371.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [47
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 1392.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [48
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 1428.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [49
+
+]
+\openout4 = `hpc.vrb'.
+
+ (./hpc.vrb)
+File: ../logo.png Graphic file (type png)
+
+<use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 1450.
+(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
+ [50
+
+]
+File: ../logo.png Graphic file (type png)
+ <use ../logo.png>
+Package pdftex.def Info: ../logo.png used on input line 1460.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
  [51
 
@@ -1516,99 +1544,11 @@ Package pdftex.def Info: ../logo.png used on input line 1354.
 
  (./hpc.vrb)
 File: ../logo.png Graphic file (type png)
-
-<use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1376.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [52
-
-]
-! Undefined control sequence.
-<argument> .../enumerate \beameritemnestingprefix 
-                                                  body end
-l.1387 \end{frame}
-                  
-? R
-OK, entering \nonstopmode...
-
-! LaTeX Error: \begin{beamer@frameslide} on input line 1387 ended by \end{beame
-r@framepauses}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1387 \end{frame}
-                  
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.1387 \end{frame}
-                  
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Too many }'s.
-\endbeamer@frameslide ...amer@framepauses}\egroup 
-                                                  \ifx \beamer@frametitle \@...
-l.1387 \end{frame}
-                  
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-! Undefined control sequence.
-\endbeamer@frameslide ...box \else \beamer@zoomer 
-                                                  \fi \beamer@undolabels \be...
-l.1387 \end{frame}
-                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-! LaTeX Error: \begin{document} ended by \end{beamer@frameslide}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1387 \end{frame}
-                  
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.1387 \end{frame}
-                  
-Things are pretty mixed up, but I think the worst is over.
-
-File: ../logo.png Graphic file (type png)
-<use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1387.
-(pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [53
-
-]
-\openout4 = `hpc.vrb'.
-
- (./hpc.vrb)
-File: ../logo.png Graphic file (type png)
  <use ../logo.png>
-Package pdftex.def Info: ../logo.png used on input line 1404.
+Package pdftex.def Info: ../logo.png used on input line 1477.
 (pdftex.def)             Requested size: 30.79613pt x 14.22636pt.
- [54
+
+[52
 
 ]
 \tf@nav=\write6
@@ -1620,11 +1560,11 @@ Package pdftex.def Info: ../logo.png used on input line 1404.
 \tf@snm=\write8
 \openout8 = `hpc.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1407.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1407.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1480.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1480.
  (./hpc.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1407.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1407.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1480.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1480.
 
 Package rerunfilecheck Info: File `hpc.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
@@ -1636,30 +1576,36 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1407.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1480.
  ) 
 Here is how much of TeX's memory you used:
- 17676 strings out of 495020
- 334704 string characters out of 6181324
+ 17679 strings out of 495020
+ 334721 string characters out of 6181324
  404331 words of memory out of 5000000
- 20280 multiletter control sequences out of 15000+600000
+ 20279 multiletter control sequences out of 15000+600000
  12997 words of font info for 50 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  48i,15n,60p,403b,570s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmtt9.pfb>
-Output written on hpc.pdf (54 pages, 251360 bytes).
+pdfTeX warning (dest): name{Navigation53} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{Navigation54} has been referenced but does not exis
+t, replaced by a fixed one
+
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmtt9.pfb>
+Output written on hpc.pdf (52 pages, 246230 bytes).
 PDF statistics:
- 1542 PDF objects out of 1728 (max. 8388607)
- 1445 compressed objects within 15 object streams
- 109 named destinations out of 1000 (max. 500000)
+ 1489 PDF objects out of 1728 (max. 8388607)
+ 1395 compressed objects within 14 object streams
+ 107 named destinations out of 1000 (max. 500000)
  88 words of extra memory for PDF output out of 10000 (max. 10000000)
 
