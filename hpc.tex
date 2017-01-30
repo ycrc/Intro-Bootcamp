@@ -20,7 +20,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Dec 2016}
+\date{Feb 2017}
 \begin{document}
 
 
@@ -210,6 +210,19 @@ Passcode or option (1-3): 1
 Success. Logging you in...
 \end{verbatim}  
 \end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{More about MFA}
+
+\begin{itemize}
+\item Don't have a smartphone? Get a hardware device from the ITS Helpdesk
+\item Register another phone: e.g your home or office phone, as a backup
+\item See http://research.computing.yale.edu/support/hpc/user-guide/mfa
+\end{itemize}
+
+
+\end{frame}
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Running jobs on a cluster}
@@ -228,7 +241,7 @@ Interactive:
 Batch:
 \begin{itemize}
 \item you write a job script containing commands
-\item you request an allocation
+\item you submit the script
 \item system grants you one or more nodes
 \item your script is automatically run on one of the nodes
 \item your script terminates and system releases nodes
@@ -256,6 +269,26 @@ Batch jobs:
 \item can run many jobs simultaneously
 \item your best choice for production computing
 \end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%                                                                                                                              
+\begin{frame}[fragile]
+\frametitle{General overview on BQS}
+
+Each BQS supports:
+\begin{itemize}
+\item Interactive allocation
+\item Batch submission
+\item Specifying the resources you need for your job
+\item Listing running and pending jobs
+\item Cancelling jobs
+\item Different node partitions/queues
+\item Priority rules
+\end{itemize}
+
+For information specific to each cluster and BQS:
+http://research.computing.yale.edu/support/hpc/clusters
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -412,7 +445,6 @@ The same script in Slurm:
 \begin{verbatim}
 #!/bin/bash
 #SBATCH -p debug 
-#SBATCH -c 20 -N 1
 #SBATCH -t 00:30:00  
 #SBATCH -J testjob
 
@@ -465,7 +497,8 @@ Library: \url{http://software.yale.edu}.
 \item Bitvise ssh \url{https://www.bitvise.com}
 \item Cygwin (Linux emulator in Windows: \url{https://www.cygwin.com}
 \end{itemize}
-\item{Duo (ruddle,farnam) can be difficult with graphical tools}
+\item{Graphical copy tools usually need configuration when used with Duo.  See:
+http://research.computing.yale.edu/transferring-files-multifactor-authentication-mfa
 \end{itemize}
 
 
@@ -648,11 +681,11 @@ farnam1$ sbatch -p general --mem-per-cpu 32768 -t 72:00 job.sh   # 32gb for 3 da
 \item Each BQS specifies this differently
 \end{itemize}
 
-To specify 16 cores with 20 GB each:  
+To specify 8 cores on one node with 8 GB RAM for each core:
 \begin{verbatim}
-Torque: qsub -lnodes=2:ppn=8 -lmem=180gb t.sh
-LSF: bsub -n 16 -M 20000 t.sh
-Slurm: sbatch -n 16 --mem-per-cpu=20G t.sh
+Torque: qsub -lnodes=1:ppn=8 -lmem=64gb t.sh
+LSF: bsub -n 8 -M 64000 t.sh
+Slurm: sbatch -c 8 --mem-per-cpu=8G t.sh
 
 \end{verbatim}
 \end{frame}
@@ -748,14 +781,13 @@ Regardless of which cluster you are on, you will submit jobs to a particular que
 \end{itemize}
 
 Each cluster has its own queues, with specific rules, such as maximum walltime, cores, nodes, jobs, etc.  
-We detail them in the following slides.
 \vspace{0.1in}
 
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}<presentation:0>
 \frametitle{Omega Queues}
 You must always specify a queue via the qsub \textbf{-q} argument on
 Omega.  The primary factor in choosing a queue is the value of
@@ -774,7 +806,7 @@ restrictions on how long jobs can run.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}<presentation:0>
 \frametitle{Grace Queues}
 The default queue on Grace is \textbf{shared}, but you can specify
 a different queue via the bsub \textbf{-q} argument.
@@ -793,7 +825,7 @@ long jobs can run.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}<presentation:0>
 \frametitle{Louise Queues}
 
 \begin{itemize}
@@ -816,7 +848,7 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}<presentation:0>
 
 \frametitle{Farnam Queues}
 
@@ -830,7 +862,7 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 \hline
 \textbf{bigmem} & 1/7 & 64 & 1.5TB RAM \\
 \hline
-\textbf{gpu} & 1/7 & TBD & 2 GPUS/node \\
+\textbf{gpu} & 1/7 & TBD & 4 GPUS/node \\
 \hline
 \textbf{scavenge} & 1/7 & 200 & preemptable \\
 \hline
@@ -841,7 +873,7 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}<presentation:0>
 \frametitle{Ruddle Queues}
 
 \begin{tabular}{|l|l|l|l|}
@@ -861,7 +893,7 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Module files}
-Much of the HPC software on Omega, Grace, Ruddle, and Farnam 
+Much of the HPC software on the clusters
 is installed in non-standard
 locations. This makes it easier to to maintain different versions of the same
 software allowing users to specify the version of an application that
@@ -1156,7 +1188,7 @@ $ bwa ... <(zcat *R1_*.fastq.gz) <(zcat *R2_*.fastq.gz)
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Use Pipes to improve performance}
 
 \vskip10pt
@@ -1187,7 +1219,7 @@ $ gunzip -c test.export.txt.gz \
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Large datasets (e.g. Genome references}
+\frametitle{Large datasets (e.g. Genomes)
 
 \begin{itemize}
 \item Please do not install your own copies of popular files (e.g. genome refs).  
@@ -1219,7 +1251,8 @@ doing standard analyses:
 \begin{frame}[fragile]
 \frametitle{Wait, where is the Parallelism?}
 
-Qsub/Bsub/Sbatch can allocate multiple nodes, but the script runs on one core on one node sequentially.  How do we use multiple cpus?
+Qsub/Bsub/Sbatch can allocate multiple cores and nodes, but the script runs on one core on one node sequentially.  Simply allocating more cores DOES NOT make jobs faster.
+How do we use multiple cores to increase speed?
 
 Two classes of parallelism:
 \begin{itemize}
@@ -1230,9 +1263,8 @@ Two classes of parallelism:
 Some options:
 \begin{itemize}
 \item Submit many batch jobs simultaneously (not good)
-\item Use job arrays (better)
+\item Use job arrays, or SimpleQueue (better)
 \item Submit a parallel version of your program (great if you have one)
-\item Use SimpleQueue (excellent)
 \end{itemize}
 
 \end{frame}
@@ -1255,10 +1287,6 @@ LSF: bsub -J "job [1-100]" ...
 
 Script references an environment variable:
 \begin{verbatim}
-#PBS -t 1-10
-
-cd $PBS_O_WORKDIR
-
 ./mycommand -i input.${PBS_ARRAYID} \
     -o output.${PBS_ARRAYID}
 \end{verbatim}
@@ -1280,6 +1308,7 @@ Advantages
 \item Handles startup, shutdown, errors
 \item Only one batch job to keep track of
 \item Keeps track of status of individual jobs
+\item More flexible than job arrays
 \item Automatically schedules jobs onto a single PBS allocation
 \end{itemize}
 
@@ -1315,6 +1344,51 @@ sbatch run.sh  # Farnam
 
 For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Parallel-enabled programs}
+\begin{itemize}
+\item Many modern programs are able to use multiple cpus on one node.
+\item Typically specify option (-p, -n) and count
+\item You must allocate matching number of cores:
+\begin{itemize}
+\item Torque: -lnodes=1:ppn=20
+\item LSF:    -n 20
+\item Slurm:  -c 20
+\end{itemize}
+\end{itemize}
+
+\begin{block}{}
+\begin{verbatim}
+#!/bin/bash
+#SBATCH -c 20
+
+someapp -n 20 ...
+\end{verbatim}
+\end{block}{}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{MPI-enabled programs}
+\begin{itemize}
+\item Some programs use MPI to run on many nodes
+\item Impressive speedups are possible
+\item MPI programs are compiled and run under MPI
+\item MPI must cooperate with BQS
+\end{itemize}
+
+\begin{block}{}
+\begin{verbatim}
+#!/bin/bash
+#SBATCH -N 4 -n 20 --mem-per-cpu 4G
+
+module load MPI/OpenMPI
+mpirun ./mpiprog ...
+\end{verbatim}
+\end{block}{}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -1382,7 +1456,6 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 \item Send an email to: \url{hpc@yale.edu}
 \item Read documentation at: \url{http://research.computing.yale.edu/hpc-support}
 \item Come to office hours: \url{http://research.computing.yale.edu/hpc-support/office-hours-support}
-\end{itemize}
 \end{itemize}
 \end{frame}
 
