@@ -1,0 +1,42 @@
+
+# (on my computer) ssh to farnam login node
+ssh rdb9@farnam.hpc.yale.edu
+
+# (on farnam login node) list my jobs
+squeue -l -u rdb9
+
+# (on farnam login node) list all jobs
+squeue -l
+
+# (on farnam login node) allocate an interactive session
+srun --pty -p interative bash
+
+# (on allocation) list my jobs
+squeue -l -u rdb9
+
+# (on allocation) 
+module use /ysm-gpfs/apps/hpc/modules/all
+module avail R
+module load Langs/R
+R
+
+exit
+
+# (on farnam login node) 
+# submit a batch job
+sbatch batch.sh
+
+# submit a job array job
+sbatch array.sh
+
+# setup and submit SQ job
+module load Tools/SimpleQueue
+
+sqCreateScript -h 
+sqCreateScript -n 2 tasklist.txt > runsq.sh
+sbatch runsq.sh
+
+# submit multithreaded job
+sbatch stress.sh
+
+# 
