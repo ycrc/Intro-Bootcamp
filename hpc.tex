@@ -305,8 +305,9 @@ Slurm  (farnam): srun -p interactive --pty bash
 
 \end{verbatim}
 
-You'll be logged into a compute node and can run your commands. To exit,
-type exit or ctrl-d
+You'll be logged into a compute node and can run your commands. 
+\vspace{0.1in}
+To exit, type exit or ctrl-d
 
 \end{frame}
 
@@ -351,7 +352,7 @@ login-0-0$
 \begin{frame}[fragile]
 \frametitle{Slurm: Example of an interactive job}
 \begin{verbatim}
-farnam-0:~ $ srun -p general --pty bash
+farnam-0:~ $ srun -p interactive --pty bash
 c01n01$ module load Apps/R
 c01n01$ R --slave -f compute.R
 c01n01$ exit
@@ -361,11 +362,18 @@ farnam-0:~ $
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
+\frametitle{Batch jobs}
+\begin{itemize}
+\item create a script wrapping your job
+\item declares resources required
+\item contains the command(s) to run
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
 \frametitle{Example batch script (Torque)}
-Here is a very simple batch script that executes an R script.
-It can contain PBS directives that embed qsub options
-in the script itself, making it easier to submit.  These options
-can be overridden by the command line arguments, however.
 
 \begin{block}{}
 \begin{verbatim}
@@ -431,9 +439,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
 
 \regfont
 \vskip14pt
-Note that ``batch.sh'' was specified via input redirection.
-This is required when using BSUB directives in the script,
-otherwise the directives will be ignored.
+Note use of \verb+<+, required for LSF
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -497,11 +503,9 @@ Library: \url{http://software.yale.edu}.
 \item Bitvise ssh \url{https://www.bitvise.com}
 \item Cygwin (Linux emulator in Windows: \url{https://www.cygwin.com}
 \end{itemize}
-\item{Graphical copy tools usually need configuration when used with Duo.  See:
+\item Graphical copy tools usually need configuration when used with Duo.  See:
 http://research.computing.yale.edu/transferring-files-multifactor-authentication-mfa
 \end{itemize}
-
-
 
 \end{frame}
 
@@ -893,26 +897,27 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Module files}
-Much of the HPC software on the clusters
-is installed in non-standard
-locations. This makes it easier to to maintain different versions of the same
-software allowing users to specify the version of an application that
-they wish to use.  This is done with the module command.
 
-\vskip10pt
-For example, before you can execute Matlab, you need to initialize your
-environment by loading a Matlab ``module file'':
+Software is setup with \it{module}
 
-\begin{verbatim}
-$ module load Apps/Matlab
-\end{verbatim}
+\begin{tabular}{|l|l|}
+\hline
+\verb+$ module avail + & find modules \\
+\verb+$ module avail name+ & find particular module \\
+\verb+$ module load modulename+ & use a module \\
+\verb+$ module list+ & show loaded modules \\
+\verb+$ module unload name+ & unload a module \\ 
+\verb+$ module purge+ & unload all \\
+\verb+$ module save collection + & save loaded modules as collection \\
+\verb+$ module restore collection+ & restore collection \\
+\verb+$ module describe collection+ & list modules in collection \\
+\hline
+\end{tabular}
 
-This will modify variables in your environment such as PATH and
-LD\_LIBRARY\_PATH so that you can execute the \textbf{matlab} command.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Omega: Finding module files}
 There are many module files for the various applications, tools, and
 libraries installed on the FAS clusters.  To find the module file that
@@ -938,7 +943,7 @@ login-0-0$ module avail
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Grace, Ruddle, Farnam: Finding module files}
 There are many module files for the various applications, tools, and
 libraries installed on thw clusters.  To find the module file that
@@ -962,7 +967,7 @@ grace1$ module avail
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Example ``module load'' commands}
 Here are some ``module load'' commands for scripting languages:
 
@@ -1219,7 +1224,7 @@ $ gunzip -c test.export.txt.gz \
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Large datasets (e.g. Genomes)
+\frametitle{Large datasets (e.g. Genomes)}
 
 \begin{itemize}
 \item Please do not install your own copies of popular files (e.g. genome refs).  
@@ -1252,6 +1257,7 @@ doing standard analyses:
 \frametitle{Wait, where is the Parallelism?}
 
 Qsub/Bsub/Sbatch can allocate multiple cores and nodes, but the script runs on one core on one node sequentially.  Simply allocating more cores DOES NOT make jobs faster.
+\vspace{.1in}
 How do we use multiple cores to increase speed?
 
 Two classes of parallelism:
@@ -1263,7 +1269,7 @@ Two classes of parallelism:
 Some options:
 \begin{itemize}
 \item Submit many batch jobs simultaneously (not good)
-\item Use job arrays, or SimpleQueue (better)
+\item Use job arrays, or SimpleQueue (much better)
 \item Submit a parallel version of your program (great if you have one)
 \end{itemize}
 
@@ -1275,7 +1281,7 @@ Some options:
 
 \begin{itemize}
 \item Useful when you have many nearly identical, independent jobs to run
-\item Starts many copies of your script, distinquished by a task id.
+\item Starts many copies of your script, distinguished by a task id.
 \end{itemize}
 
 Submit jobs like this:
@@ -1327,16 +1333,13 @@ cd ~/mydir/myrun; prog arg1 arg2 -o job2.out
 \end{verbatim}
 \item Create launch script
 \begin{verbatim}
-# Louise:
-/path/to/sqPBS.py queue Nodes Account Title jobs.list > run.sh
-# Omega, Grace, Ruddle, Farnam:
 module load Tools/SimpleQueue
 sqCreateScript -q queuename -n 4 jobs.list > run.sh
 \end{verbatim}
 
 \item Submit launch script
 \begin{verbatim}
-qsub run.sh    # Louise, Omega, Ruddle
+qsub run.sh    # Omega, Ruddle
 bsub < run.sh  # Grace
 sbatch run.sh  # Farnam
 \end{verbatim}
@@ -1351,7 +1354,7 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 \frametitle{Parallel-enabled programs}
 \begin{itemize}
 \item Many modern programs are able to use multiple cpus on one node.
-\item Typically specify option (-p, -n) and count
+\item Typically specify something like \verb+-p 20+ or \verb+-t 20+
 \item You must allocate matching number of cores:
 \begin{itemize}
 \item Torque: -lnodes=1:ppn=20
@@ -1365,7 +1368,7 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 #!/bin/bash
 #SBATCH -c 20
 
-someapp -n 20 ...
+myapp -t 20 ...
 \end{verbatim}
 \end{block}{}
 \end{frame}
@@ -1412,16 +1415,16 @@ mpirun ./mpiprog ...
 
 \begin{itemize}
 \item Use top or /usr/bin/time -a to monitor usage
-\item Consider using memory option when submitting or allocate entire node.
+\item Specify memory and walltime requirements
 \end{itemize}
 
 \item Be considerate!  Clusters are shared resources.
 
 \begin{itemize}
-\item Don't run programs on the login nodes.  Make sure to allocate a compute node.
-\item Don't submit a large number of jobs at once.  Use simplequeue.
+\item Don't run programs on the login nodes.  Use a compute node.
+\item Don't submit a huge number of jobs.  Use simplequeue or job array.
 \item Don't do heavy IO to /home.
-\item Don't fill filesystems.
+\item Keep an eye on quotas.  Don't fill filesystems.
 \end{itemize}
 \end{itemize}
 
@@ -1455,7 +1458,7 @@ mpirun ./mpiprog ...
 \begin{itemize}
 \item Send an email to: \url{hpc@yale.edu}
 \item Read documentation at: \url{http://research.computing.yale.edu/hpc-support}
-\item Come to office hours: \url{http://research.computing.yale.edu/hpc-support/office-hours-support}
+\item Come to office hours: \url{http://research.computing.yale.edu/support/office-hours-getting-help}
 \end{itemize}
 \end{frame}
 
