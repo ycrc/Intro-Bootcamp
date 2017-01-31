@@ -896,7 +896,7 @@ of these node types.  Use -W PARTITION:\textit{type} to select a specific type.
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Module files}
+\frametitle{Modules}
 
 Software is setup with \it{module}
 
@@ -904,7 +904,7 @@ Software is setup with \it{module}
 \hline
 \verb+$ module avail + & find modules \\
 \verb+$ module avail name+ & find particular module \\
-\verb+$ module load modulename+ & use a module \\
+\verb+$ module load name+ & use a module \\
 \verb+$ module list+ & show loaded modules \\
 \verb+$ module unload name+ & unload a module \\ 
 \verb+$ module purge+ & unload all \\
@@ -1256,7 +1256,9 @@ doing standard analyses:
 \begin{frame}[fragile]
 \frametitle{Wait, where is the Parallelism?}
 
-Qsub/Bsub/Sbatch can allocate multiple cores and nodes, but the script runs on one core on one node sequentially.  Simply allocating more cores DOES NOT make jobs faster.
+Qsub/Bsub/Sbatch can allocate multiple cores and nodes, but the script runs on one core on one node sequentially.  
+\vspace{0.1in}
+Simply allocating more nodes or cores DOES NOT make jobs faster.
 \vspace{.1in}
 How do we use multiple cores to increase speed?
 
@@ -1291,7 +1293,7 @@ Slurm: sbatch --array=1-100 ..
 LSF: bsub -J "job [1-100]" ...
 \end{verbatim}
 
-Script references an environment variable:
+You batch script uses an environment variable:
 \begin{verbatim}
 ./mycommand -i input.${PBS_ARRAYID} \
     -o output.${PBS_ARRAYID}
@@ -1354,7 +1356,7 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 \frametitle{Parallel-enabled programs}
 \begin{itemize}
 \item Many modern programs are able to use multiple cpus on one node.
-\item Typically specify something like \verb+-p 20+ or \verb+-t 20+
+\item Typically specify something like \verb+-p 20+ or \verb+-t 20+ (see man page)
 \item You must allocate matching number of cores:
 \begin{itemize}
 \item Torque: -lnodes=1:ppn=20
