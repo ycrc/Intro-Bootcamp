@@ -12,17 +12,17 @@
 \usepackage{multimedia}
 \usepackage{pdfpages}
 
-\title{Using the Yale HPC Clusters}
-\titlegraphic{\includegraphics[height=2.0cm]{../logo.png}}
-\logo{\includegraphics[height=0.5cm]{../logo.png}}
+\title{Using the Yale HPC Clusters}`
+\titlegraphic{\includegraphics[height=2.0cm]{logo.png}}
+\logo{\includegraphics[height=0.5cm]{logo.png}}
 \author{{Robert Bjornson}}
 \institute[Yale]{
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Feb 2017}
-\begin{document}
+\date{Mar 2017}
 
+\begin{document}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -104,16 +104,18 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (Dec 2016)}
+\frametitle{Summary of Yale Clusters (Mar 2017)}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-& \textbf{Omega} & \textbf{Grace}& \textbf{Louise/Farnam} & \textbf{Ruddle} \\
+& \textbf{Omega} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} \\
 \hline
 \textbf{Role} & FAS & FAS & LS/Med & YCGA  \\
 \hline
-\textbf{Total nodes} & 1028 & 216 & 115+ & 156+  \\
+\textbf{~Total nodes} & 1028 & 216 & 320+ & 156+  \\
 \hline
-\textbf{Cores/node} & 8 & 20 & \multicolumn{2}{c}{mostly 20} \\
+\textbf{~Total cores} & 8500 & 4700 & 5300 & 3000 \\
+\hline
+\textbf{Cores/node} & 8 & 20 & 8-20 & 20 \\
 \hline
 \textbf{Mem/node} & 36 GB/48 GB & 128 GB & \multicolumn{2}{c}{128-1500GB}  \\
 \hline
@@ -121,9 +123,9 @@ Some of the limitations of clusters are:
 \hline
 \textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS \\
 \hline
-\textbf{Batch queueing} & Torque & LSF & Torque/Slurm & Torque \\
+\textbf{Batch queueing} & Torque & LSF & Slurm & Torque \\
 \hline
-\textbf{Duo MFA?} & No & No & No/Yes & Yes \\
+\textbf{Duo MFA?} & No & No & Yes & Yes \\
 \hline
 \end{tabular}
 
@@ -131,6 +133,20 @@ Some of the limitations of clusters are:
 
 Details on each cluster here:
 \url{http://research.computing.yale.edu/hpc-clusters}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Migration to Slurm}
+We will be migrating all Yale clusters to Slurm this year.    
+
+Tentative schedule, coinciding with scheduled maintenance periods:
+\begin{itemize}
+\item Ruddle: April 2017
+\item Omega: May 2017
+\item Grace: June 2017
+\end{itemize}
 
 \end{frame}
 
@@ -161,7 +177,6 @@ From a Mac or Linux machine, you simply use the \textbf{ssh} command:
 \begin{verbatim}
 laptop$ ssh netid@omega.hpc.yale.edu
 laptop$ ssh netid@grace.hpc.yale.edu
-laptop$ ssh netid@louise.hpc.yale.edu
 laptop$ ssh netid@farnam.hpc.yale.edu
 laptop$ ssh netid@ruddle.hpc.yale.edu
 \end{verbatim}
@@ -175,14 +190,36 @@ For more information on using PuTTY see:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Ssh key pairs}
+\frametitle{Understanding ssh key pairs}
 \begin{itemize}
 \item We use key pairs instead of passwords to log into clusters
-\item Keys are generated as pair: public (id\_rsa.pub) and private (id\_rsa)
+\item Keys are generated as pair:
+\begin{itemize}
+\item ssh-keygen: public (id\_rsa.pub) and private (id\_rsa)
+\item putty/winscp: public (name.pub) and private (name.ppk)
+\end{itemize}
 \item You should always use a pass phrase to protect private key!
 \item You can freely give the public key to anyone
+\item You can generate a new pair for each of your computers, or reuse the same pair.
 \item NEVER give the private key to anyone!
 \end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+
+\frametitle{Outline of setting up keys}
+\begin{enumerate}
+\item Generate key pair using ssh-keygen (linux/mac) or puttygen (windows)
+\item Locate the public and private key files you generated
+\item Use our tool to upload the public key (link on page shown below)
+\item Wait 15 minutes for key to propagate
+\item Connect using private key
+\end{enumerate}
+
+This can be tricky.  See http://research.computing.yale.edu/support/hpc/user-guide
+for the exact steps or contact us if you have problems.
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -298,7 +335,6 @@ http://research.computing.yale.edu/support/hpc/clusters
 \begin{verbatim}
 
 Torque (omega) : qsub -I -q fas_devel
-Torque (louise): qsub -I -q general 
 Torque (ruddle): qsub -I -q interactive
 LSF    (grace) : bsub -Is -q interactive bash
 Slurm  (farnam): srun -p interactive --pty bash
@@ -489,7 +525,7 @@ to copy scripts and data files from between local computer and cluster.
 
 \begin{verbatim}
 laptop$ scp -r ~/workdir netid@omega.hpc.yale.edu:
-laptop$ rsync -av ~/workdir netid@grace.hpc.yale.edu:
+laptop$ rsync -av -e 'ssh -i ~/.ssh/id_rsa' ~/workdir netid@grace.hpc.yale.edu:
 \end{verbatim}
 
 \item Cyberduck is a good graphical tool for Mac or Windows.  \url{https://cyberduck.io}
@@ -511,7 +547,7 @@ http://research.computing.yale.edu/transferring-files-multifactor-authentication
 
 %----------- slide --------------------------------------------------%
 \begin{frame}
-\frametitle{Summary of Torque commands (Omega/Louise/Ruddle)}
+\frametitle{Summary of Torque commands (Omega/Ruddle)}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Description} & \textbf{Command} \\
@@ -698,9 +734,10 @@ Slurm: sbatch -c 8 --mem-per-cpu=8G t.sh
 \begin{frame}[fragile]
 \frametitle{Controlling walltime}
 \begin{itemize}
-\item Each job has a default maximum walltime
+\item Each job is assigned a maximum walltime
+\item If not specified, it will get the default walltime limit
 \item The job is killed if that is exceeded
-\item You can specify longer walltime to prevent being killed
+\item You can specify longer walltime to avoid the job being killed
 \item You can specify shorter walltime to get resources faster
 \end{itemize}
 
