@@ -1,0 +1,10 @@
+sleep 2; date > SQ_1.out
+sleep 4; date > SQ_2.out
+sleep 9; date > SQ_3.out
+sleep 1; date > SQ_4.out
+sleep 20; date > SQ_5.out
+sleep 13; date > SQ_6.out
+sleep 8; date > SQ_7.out
+sleep 20; date > SQ_8.out
+sleep 16; date > SQ_9.out
+sleep 20; date > SQ_10.out
