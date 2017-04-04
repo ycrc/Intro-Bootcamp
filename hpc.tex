@@ -12,6 +12,8 @@
 \usepackage{multimedia}
 \usepackage{pdfpages}
 
+\begin{document}
+
 \title{Using the Yale HPC Clusters}`
 \titlegraphic{\includegraphics[height=2.0cm]{logo.png}}
 \logo{\includegraphics[height=0.5cm]{logo.png}}
@@ -20,9 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Mar 2017}
-
-\begin{document}
+\date{Apr 2017}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -143,11 +143,18 @@ We will be migrating all Yale clusters to Slurm this year.
 
 Tentative schedule, coinciding with scheduled maintenance periods:
 \begin{itemize}
-\item Ruddle: April 2017
-\item Omega: May 2017
-\item Grace: June 2017
+\item Farnam: Done
+\item Ruddle: May 2017
+\item Omega: Summer 2017
+\item Grace: Summer 2017
 \end{itemize}
 
+We are setting up small slurm clusters for testing:
+\begin{itemize}
+\item ruddle-next.hpc.yale.edu
+\item grace-next.hpc.yale.edu
+\item omega-next.hpc.yale.edu (coming soon)
+\end{itemize}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -224,10 +231,10 @@ for the exact steps or contact us if you have problems.
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sshing to Farnam and Ruddle}
+\frametitle{Sshing to Ruddle}
 
 \begin{itemize}
-\item Farnam and Ruddle have an additional level of ssh security, using Multi Factor Authentication (MFA)
+\item Ruddle has an additional level of ssh security, using Multi Factor Authentication (MFA)
 \item We use Duo, the same MFA as other secure Yale sites
 \end{itemize}
 
@@ -1066,6 +1073,10 @@ Two different ways:
 \item works very well for rich graphics
 \end{itemize}
 \end{itemize}
+
+More information is here:
+http://research.computing.yale.edu/support/hpc/user-guide
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -1506,7 +1517,10 @@ mpirun ./mpiprog ...
 \frametitle{Resources}
 
 \begin{itemize}
-\item Very useful table of equivalent BQS commands: https://slurm.schedmd.com/rosetta.pdf
+\item This presentation: https://github.com/ycrc/Intro-Bootcamp
+\item Table of equivalent BQS commands: https://slurm.schedmd.com/rosetta.pdf
+\item Linux: http://www.ee.surrey.ac.uk/Teaching/Unix
+\item Slurm: http://slurm.schedmd.com
 \item Recommended Books
 \begin{itemize}
 \item Learning Python: Mark Lutz
