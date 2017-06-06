@@ -86,6 +86,7 @@ Here are some reasons to go to that effort:
 \item Need more memory
 \item Want to use software installed on the cluster
 \item Want to access data stored on the cluster
+\item Want to use GPUs
 \end{itemize}
 \end{frame}
 
@@ -319,15 +320,15 @@ Batch jobs:
 \begin{frame}[fragile]
 \frametitle{General overview of Slurm}
 
-Slurm handles:
+Slurm manages all the details of cluster operation:
 \begin{itemize}
-\item Interactive allocation
-\item Batch submission
-\item Specifying the resources you need for your job
+\item Interactive node allocation
+\item Batch job submission
+\item Specifying and reserving the resources you need for your job
 \item Listing running and pending jobs
 \item Cancelling jobs
-\item Different node partitions/queues
-\item Priority rules
+\item Grouping node resources into partitions
+\item Prioritizing and scheduling jobs
 \end{itemize}
 
 For information specific to each cluster:
@@ -461,7 +462,11 @@ Cancel a job & scancel \textit{JOBID} \\
 \hline
 Get queue info & squeue -p \textit{PART} \\
 \hline
+Get partition info & sinfo -p {PART} \\
+\hline
 Get node info & sinfo -N \\
+\hline
+Get job info & sacct -j \textit{JOBID} -l \\
 \hline
 \end{tabular}
 \end{frame}
@@ -502,17 +507,53 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
+\frametitle{Partitions}
+\begin{itemize}
+\item Compute nodes are grouped into partitions
+\item Each cluster has its own set of partitions
+\item Jobs are submitted to a specific partition
+\item Each partition has rules:
+\begin{itemize}
+\item Who can submit jobs
+\item How many cores and how much memory per user
+\item Maximum walltime
+\end{itemize}
+\item PI partitions are for specific groups
+\item scavenge allows using idle nodes from other partitions
+\item See cluster page for specifics
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Nodes -N, Tasks -n, Cores -c}
+\begin{itemize}
+\item The -N, -n, -c flags often cause confusion.  They change the size of your allocation and its placement.
+\item By default, you get 1 task, having 1 core, running on 1 node
+\item -N \textit{N} forces each task to be scheduled onto N nodes.  Rarely useful.
+\item -n \textit{n} specifies n tasks.  This is normally only useful with MPI.
+\item -c \textit{c} causes each task to have c cpus/cores.  This is very useful for multithreaded programs
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
 \frametitle{Controlling memory usage}
 \begin{itemize}
 \item It's crucial to understand memory required by your program.
 \item Nodes (and thus memory) are often shared
-\item Jobs have default memory limits that you can override
+\item Jobs have (small) default memory limits that you can/should override
+\item Jobs exceeding their request are killed.  Common errors: ``bus error'', or ``Exeeded step memory at some point''
+\item /usr/bin/time -a \textit{cmd ...} will show memory usage (maxresident)
+\item --mem=8g requests 8GB per node
+\item --mem-per-cpu=8g requests 8GB per cpu.  Multiplied by cores (-c)
+
 \end{itemize}
 
 To specify 8 cores on one node with 8 GB RAM for each core:
 \begin{verbatim}
 sbatch -c 8 --mem-per-cpu=8G t.sh
-
 \end{verbatim}
 \end{frame}
 
@@ -532,23 +573,6 @@ To specify walltime limit of 2 days:
 sbatch -t 2- t.sh
 
 \end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Submission Queues}
-
-Regardless of which cluster you are on, you will submit jobs to a particular queue, depending on:
-\begin{itemize}
-\item{Job's requirements}
-\item{Access rights for particular queues}
-\item{Queue rules}
-\end{itemize}
-
-Each cluster has its own queues, with specific rules, such as maximum walltime, cores, nodes, jobs, etc.  
-\vspace{0.1in}
-
-
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -657,7 +681,6 @@ Software is setup with \it{module}
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Example ``module load'' commands}
-Here are some ``module load'' commands for scripting languages:
 
 \begin{verbatim}
 module load Python/3.5.1-foss-2016b
@@ -795,7 +818,7 @@ $ gunzip -c test.export.txt.gz \
 
 Contact Jim Knight (j.knight@yale.edu)
 
-http://campuspress.yale.edu/knightlab
+>http://campuspress.yale.edu/knightlab
 
 The Knight lab has a number of high performance, parallel pipelines for
 doing standard analyses:
@@ -812,9 +835,9 @@ doing standard analyses:
 \frametitle{Wait, where is the Parallelism?}
 
 Sbatch can allocate multiple cores and nodes, but the script runs on one core on one node sequentially.  
-\vspace{0.1in}
+
 Simply allocating more nodes or cores DOES NOT make jobs faster.
-\vspace{.1in}
+
 How do we use multiple cores to increase speed?
 
 Two classes of parallelism:
@@ -966,6 +989,7 @@ mpirun ./mpiprog ...
 \item Specify memory and walltime requirements
 \end{itemize}
 
+\item Learn Linux! Almost all HPC is linux-based.
 \item Be considerate!  Clusters are shared resources.
 
 \begin{itemize}
@@ -1017,16 +1041,10 @@ mpirun ./mpiprog ...
 
 \begin{itemize}
 \item This presentation: https://github.com/ycrc/Intro-Bootcamp
+\item Our other courses: Python, R, Git, Linux, etc: http://research.computing.yale.edu/training
 \item Table of equivalent Batch Queueing commands: https://slurm.schedmd.com/rosetta.pdf
-\item Linux: http://www.ee.surrey.ac.uk/Teaching/Unix
+\item Linux: http://www.ee.surrey.ac.uk/Teaching/Unix or http://ryanstutorials.net
 \item Slurm: http://slurm.schedmd.com
-\item Recommended Books
-\begin{itemize}
-\item Learning Python: Mark Lutz
-\item Python Cookbook: Alex Martelli
-\item Bioinformatics Programming using Python: Mitchell Model
-\item Learning Perl: Randal Schwarz
-\end{itemize}
 \end{itemize}
 
 \end{frame}
