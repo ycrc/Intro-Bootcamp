@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Apr 2017}
+\date{June 2017}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -54,7 +54,7 @@ A \textbf{cluster} usually consists of a hundred to a thousand rack mounted
 computers, called \textbf{nodes}.  It has one or two \textbf{login nodes}
 that are externally accessible, but most of the nodes are
 compute nodes and are only accessed from a login node via a
-\textbf{batch queueing system} (BQS).
+\textbf{batch queueing system} (Slurm).
 
 \vskip10pt
 The CPU used in clusters may be similar to the CPU in your
@@ -65,6 +65,7 @@ desktop computer, but in other respects they are rather different.
 \item Command line oriented 
 \item Many cores (cpus) per node
 \item No monitors, no CD/DVD drives, no audio or video cards
+\item Lots of RAM
 \item Very large distributed file system(s)
 \item Connected internally by a fast network
 \end{itemize}
@@ -104,7 +105,7 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (Mar 2017)}
+\frametitle{Summary of Yale Clusters (June 2017)}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 & \textbf{Omega} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} \\
@@ -123,9 +124,9 @@ Some of the limitations of clusters are:
 \hline
 \textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS \\
 \hline
-\textbf{Batch queueing} & Torque & LSF & Slurm & Torque \\
+\textbf{Batch queueing} & Torque & Slurm & Slurm & Slurm \\
 \hline
-\textbf{Duo MFA?} & No & No & Yes & Yes \\
+\textbf{Duo MFA?} & No & No & No & Yes \\
 \hline
 \end{tabular}
 
@@ -144,14 +145,13 @@ We will be migrating all Yale clusters to Slurm this year.
 Tentative schedule, coinciding with scheduled maintenance periods:
 \begin{itemize}
 \item Farnam: Done
-\item Ruddle: May 2017
-\item Omega: Summer 2017
-\item Grace: Summer 2017
+\item Ruddle: Done
+\item Grace: June 15
+\item Omega: ? 
 \end{itemize}
 
 We are setting up small slurm clusters for testing:
 \begin{itemize}
-\item ruddle-next.hpc.yale.edu
 \item grace-next.hpc.yale.edu
 \item omega-next.hpc.yale.edu (coming soon)
 \end{itemize}
@@ -317,9 +317,9 @@ Batch jobs:
 
 %----------- slide --------------------------------------------------%                                                                                                                              
 \begin{frame}[fragile]
-\frametitle{General overview on BQS}
+\frametitle{General overview of Slurm}
 
-Each BQS supports:
+Slurm handles:
 \begin{itemize}
 \item Interactive allocation
 \item Batch submission
@@ -330,7 +330,7 @@ Each BQS supports:
 \item Priority rules
 \end{itemize}
 
-For information specific to each cluster and BQS:
+For information specific to each cluster:
 http://research.computing.yale.edu/support/hpc/clusters
 
 \end{frame}
@@ -341,10 +341,7 @@ http://research.computing.yale.edu/support/hpc/clusters
 
 \begin{verbatim}
 
-Torque (omega) : qsub -I -q fas_devel
-Torque (ruddle): qsub -I -q interactive
-LSF    (grace) : bsub -Is -q interactive bash
-Slurm  (farnam): srun -p interactive --pty bash
+srun -p interactive --pty bash
 
 \end{verbatim}
 
@@ -356,48 +353,11 @@ To exit, type exit or ctrl-d
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Torque: Example of an interactive job}
-\begin{verbatim}
-laptop$ ssh sw464@omega.hpc.yale.edu
-Last login: Thu Nov  6 10:48:46 2014 from akw105.cs.yale.internal
-[ snipped ascii art, etc ]
-login-0-0$ qsub -I -q fas_devel
-qsub: waiting for job 4347393.rocks.omega.hpc.yale.internal to start
-qsub: job 4347393.rocks.omega.hpc.yale.internal ready
-compute-34-15$ cd ~/workdir
-compute-34-15$ module load Apps/R/3.0.3
-compute-34-15$ R --slave -f compute.R
-compute-34-15$ exit 
-login-0-0$ 
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{LSF: Example of an interactive job}
-\begin{verbatim}
-laptop$ ssh sw464@grace.hpc.yale.edu
-Last login: Thu Nov  6 10:47:52 2014 from akw105.cs.yale.internal
-[ snipped ascii art, etc ]
-grace1$ bsub -Is -q interactive bash
-Job <358314> is submitted to queue.
-<<Waiting for dispatch ...>>
-<<Starting on c01n01>>
-c01n01$ cd ~/workdir
-c01n01$ module load Apps/R/3.0.3
-c01n01$ R  --slave -f compute.R
-c01n01$ exit 
-login-0-0$ 
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
 \frametitle{Slurm: Example of an interactive job}
 \begin{verbatim}
-farnam-0:~ $ srun -p interactive --pty bash
-c01n01$ module load Apps/R
-c01n01$ R --slave -f compute.R
+farnam-0:~ $ srun --pty -p interactive --mem=8g bash
+c01n01$ module load Bowtie2
+c01n01$ bowtie2 -1 data/sample_R1.fastq -2 data/sample_R2.fastq -x hg19/genome > output.sam
 c01n01$ exit
 farnam-0:~ $
 \end{verbatim}
@@ -416,89 +376,24 @@ farnam-0:~ $
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Example batch script (Torque)}
-
-\begin{block}{}
-\begin{verbatim}
-#!/bin/bash
-#PBS -q fas_normal
-#PBS -m abe -M stephen.weston@yale.edu
-cd $PBS_O_WORKDIR
-
-module load Apps/R/3.0.3
-R --slave -f compute.R
-\end{verbatim}
-\end{block}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Example of a non-interactive/batch job (Torque)}
-\smallfont
-\begin{verbatim}
-login-0-0$ qsub batch.sh
-4348736.rocks.omega.hpc.yale.internal
--bash-4.1$ qstat -1 -n 5262300
-\end{verbatim}
-\tinyfont
-\begin{verbatim}
-rocks.omega.hpc.yale.internal: 
-                                                                                  Req'd    Req'd       Elap
-Job ID     Username    Queue    Jobname     SessID  NDS   TSK   Memory   Time    S   Time
--------    ----------- -------- ----------- ------ ----- ------ ------ --------- - ---------
-5262300    sw464       fas_norm batch.sh    19620   --     --     --   01:00:00 R  00:00:34   compute-34-15/2
-
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Example batch script (LSF)}
-The same script in LSF:
-
-\begin{block}{}
-\begin{verbatim}
-#!/bin/bash
-#BSUB -q shared
-
-# automatically in submission dir
-module load Apps/R/3.0.3
-R --slave -f compute.R
-\end{verbatim}
-\end{block}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Example of a batch job (LSF)}
-\smallfont
-\begin{verbatim}
-[rdb9@grace0 ~]$ bsub < batch.sh
-Job <113409> is submitted to queue <shared>.
-[rdb9@grace0 ~]$ bjobs 113409
-JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
-113409     rdb9    RUN   shared     grace0      c13n12      *name;date Sep  7 11:18
-\end{verbatim}
-
-\regfont
-\vskip14pt
-Note use of \verb+<+, required for LSF
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
 \frametitle{Slurm: Example of a batch script}
-The same script in Slurm:
 
 \begin{block}{}
 \begin{verbatim}
 #!/bin/bash
-#SBATCH -p debug 
-#SBATCH -t 00:30:00  
-#SBATCH -J testjob
 
-module load Apps/R
-R --slave -f compute.R
+#SBATCH --mail-type all --mail-user robert.bjornson@yale.edu
+#SBATCH -J bowtie
+#SBATCH -c 20 
+#SBATCH -p general
+#SBATCH --mem 8g 
+
+module load Bowtie2
+
+time bowtie2 -p 20 -1 ../data/sample_R1.fastq \
+   -2 ../data/sample_R2.fastq -x ../hg19/genome \
+   > output.sam
+
 \end{verbatim}
 \end{block}{}
 \end{frame}
@@ -508,11 +403,11 @@ R --slave -f compute.R
 \frametitle{Slurm: Example of a batch job}
 \smallfont
 \begin{verbatim}
-$ sbatch test.sh
+$ sbatch batch.sh
 Submitted batch job 42
 $ squeue -j 42
 JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-   42   general   my_job     rdb9  R       0:03      1 c13n10
+   42   general   bowtie     rdb9  R       0:03      1 c13n10
 \end{verbatim}
 \vskip14pt
 \regfont
@@ -532,7 +427,8 @@ to copy scripts and data files from between local computer and cluster.
 
 \begin{verbatim}
 laptop$ scp -r ~/workdir netid@omega.hpc.yale.edu:
-laptop$ rsync -av -e 'ssh -i ~/.ssh/id_rsa' ~/workdir netid@grace.hpc.yale.edu:
+laptop$ rsync -av -e 'ssh -i ~/.ssh/id_rsa' ~/workdir \
+        netid@grace.hpc.yale.edu:
 \end{verbatim}
 
 \item Cyberduck is a good graphical tool for Mac or Windows.  \url{https://cyberduck.io}
@@ -540,131 +436,15 @@ laptop$ rsync -av -e 'ssh -i ~/.ssh/id_rsa' ~/workdir netid@grace.hpc.yale.edu:
 \item For Windows, WinSCP is available from the Yale Software
 Library: \url{http://software.yale.edu}.
 
-
-\item Other windows options include:
-\begin{itemize}
-\item Bitvise ssh \url{https://www.bitvise.com}
-\item Cygwin (Linux emulator in Windows: \url{https://www.cygwin.com}
-\end{itemize}
 \item Graphical copy tools usually need configuration when used with Duo.  See:
-http://research.computing.yale.edu/transferring-files-multifactor-authentication-mfa
+http://research.computing.yale.edu/support/hpc/user-guide/transfer-files-or-cluster
 \end{itemize}
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}
-\frametitle{Summary of Torque commands (Omega/Ruddle)}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Description} & \textbf{Command} \\
-\hline
-Submit a job & qsub [\textit{opts}] \textit{SCRIPT} \\
-\hline
-Status of a job & qstat \textit{JOBID} \\
-\hline
-Status of a user's jobs & qstat -u \textit{NETID} \\
-\hline
-Detailed status of a user's jobs & qstat -1 -n -u \textit{NETID} \\
-\hline
-Cancel a job & qdel \textit{JOBID} \\
-\hline
-Get queue info & qstat -Q \\
-\hline
-Get node info & pbsnodes \textit{NODE} \\
-\hline
-\end{tabular}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Summary of qsub options}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Description} & \textbf{Option} \\
-\hline
-Queue & -q \textit{QUEUE} \\
-\hline
-Process count & -l nodes=\textit{N}:ppn=\textit{M} \\
-\hline
-Wall clock limit & -l walltime=\textit{DD}:\textit{HH}:\textit{MM}:\textit{SS} \\
-\hline
-Memory limit & -l mem=\textit{J}gb \\
-\hline
-Interactive job & -\texttt{I} \\
-\hline
-Interactive/X11 job & -\texttt{I} -X \\
-\hline
-Job name & -N \textit{NAME} \\
-\hline
-\end{tabular}
-
-\vskip10pt
-Examples:
-\begin{verbatim}
-login-0-0$ qsub -I -q fas_normal -l mem=32gb,walltime=24:00:00
-login-0-0$ qsub -q fas_long -l mem=32gb,walltime=3:00:00:00 job.sh
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}
-\frametitle{Summary of LSF commands (Grace)}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Description} & \textbf{Command} \\
-\hline
-Submit a job & bsub [\textit{opts}] \textless \textit{SCRIPT} \\
-\hline
-Status of a job & bjobs \textit{JOBID} \\
-\hline
-Status of a user's jobs & bjobs -u \textit{NETID} \\
-\hline
-Cancel a job & bkill \textit{JOBID} \\
-\hline
-Get queue info & bqueues \\
-\hline
-Get node info & bhosts \\
-\hline
-\end{tabular}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Summary of LSF bsub options (Grace)}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Description} & \textbf{Option} \\
-\hline
-Queue & -q \textit{QUEUE} \\
-\hline
-Process count & -n \textit{P} -R "span[hosts=1]" \\
-\hline
-Process count & -n \textit{P} \\
-\hline
-Wall clock limit & -W \textit{HH}:\textit{MM} \\
-\hline
-Memory limit & -M \textit{M} \\
-\hline
-Interactive job & -\texttt{Is} bash \\
-\hline
-Interactive/X11 job & -\texttt{Is} -XF bash \\
-\hline
-Job name & -J \textit{NAME} \\
-\hline
-\end{tabular}
-
-\vskip10pt
-Examples:
-\begin{verbatim}
-grace1$ bsub -Is -q shared -M 32768 -W 24:00     # 32gb for 1 day
-grace1$ bsub -q long -M 32768 -W 72:00 < job.sh  # 32gb for 3 days
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}
-\frametitle{Summary of Slurm commands (Farnam)}
+\frametitle{Summary of Slurm commands}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Description} & \textbf{Command} \\
@@ -688,20 +468,22 @@ Get node info & sinfo -N \\
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Slurm sbatch/srun options (Farnam)}
+\frametitle{Summary of Slurm sbatch/srun options}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Description} & \textbf{Option} \\
 \hline
-Partition & -p \textit{QUEUE} \\
+Partition & -p \textit{PART} \\
 \hline
-Process count & -c \textit{Cpus} \\
+Process count & -c \textit{CPUS} \\
 \hline
-Node count & -N \textit{Nodes} \\
+Node count & -N \textit{NODES} \\
+\hline
+Task count & -n \textit{TASKS} \\
 \hline
 Wall clock limit & -t \textit{HH}:\textit{MM} or \textit{DD}-\textit{HH}\\
 \hline
-Memory limit & --mem-per-cpu \textit{M} (MB)\\
+Memory limit & -{}-mem 4g or -{}-mem-per-cpu 4g)\\
 \hline
 Interactive job & srun -{}-pty bash \\
 \hline
@@ -713,8 +495,8 @@ Job name & -J \textit{NAME} \\
 Examples:
 \smallfont
 \begin{verbatim}
-farnam1$ srun --pty -p general --mem-per-cpu 32768 -t 24:00 bash # 32gb for 1 day
-farnam1$ sbatch -p general --mem-per-cpu 32768 -t 72:00 job.sh   # 32gb for 3 days
+farnam1$ srun --pty -p general --mem-per-cpu 32g -t 24:00 bash 
+farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh   
 \end{verbatim}
 \end{frame}
 
@@ -725,14 +507,11 @@ farnam1$ sbatch -p general --mem-per-cpu 32768 -t 72:00 job.sh   # 32gb for 3 da
 \item It's crucial to understand memory required by your program.
 \item Nodes (and thus memory) are often shared
 \item Jobs have default memory limits that you can override
-\item Each BQS specifies this differently
 \end{itemize}
 
 To specify 8 cores on one node with 8 GB RAM for each core:
 \begin{verbatim}
-Torque: qsub -lnodes=1:ppn=8 -lmem=64gb t.sh
-LSF: bsub -n 8 -M 64000 t.sh
-Slurm: sbatch -c 8 --mem-per-cpu=8G t.sh
+sbatch -c 8 --mem-per-cpu=8G t.sh
 
 \end{verbatim}
 \end{frame}
@@ -750,71 +529,9 @@ Slurm: sbatch -c 8 --mem-per-cpu=8G t.sh
 
 To specify walltime limit of 2 days:
 \begin{verbatim}
-Torque: qsub -lwalltime=2:00:00:00 t.sh
-LSF: bsub -W 48:00 t.sh
-Slurm: sbatch -t 2- t.sh
+sbatch -t 2- t.sh
 
 \end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>
-\frametitle{Grace: Notes on memory limits}
-The \textbf{-M} option specifies the maximum memory per core in
-megabytes.
-It is a runtime limit, and is not used for scheduling purposes.
-The default value is 5120, or 5 gigabytes per core.
-
-\vskip10pt
-The \textbf{-R "rusage[mem=M]"} option specifies the memory to ``reserve''
-for the job on each node. It is used for scheduling purposes and has no
-effect at runtime.
-The default value is 5120, or 5 gigabytes per node.
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Omega: Requesting walltime with qsub}
-The value of \textbf{walltime} is particularly important because if you
-ask for too little time, your job will be killed, but if you ask for too
-much, it may not be scheduled to run for a long time.
-
-\begin{itemize}
-\item Specified as DD:HH:MM:SS (days, hours, minutes, seconds)
-\item Default is one hour
-\item Try to determine expected runtime during testing
-\end{itemize}
-
-The following requests four hours of time:
-
-\begin{verbatim}
-login-0-0$ qsub -q fas_normal -l walltime=4:00:00 batch.sh
-\end{verbatim}
-
-If your job checkpoints itself periodically, then this decision is
-less critical.
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Grace: Requesting walltime with bsub}
-You should use the bsub \textbf{-W} option to specify the maximum time
-needed by your job. If you exceed this time, your job will be killed.
-
-\begin{itemize}
-\item Specified as HH:MM (hours, minutes)
-\item Default is one hour
-\item Try to determine expected runtime during testing
-\end{itemize}
-
-The following requests four hours of time:
-
-\begin{verbatim}
-grace1$ bsub -q shared -W 4:00 < batch.sh
-\end{verbatim}
-
-If your job checkpoints itself periodically, then this decision is
-less critical.
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -869,29 +586,6 @@ long jobs can run.
 \item[shared]                1 day
 \item[interactive]           4 hours
 \end{description}
-
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>
-\frametitle{Louise Queues}
-
-\begin{itemize}
-\item Louise has 5 different nodes types, ranging from 4-64 cores, and 16-512 GB of RAM.  General queue jobs may be run on any
-of these node types.  Use -W PARTITION:\textit{type} to select a specific type. 
-\end{itemize}
-
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Queue} & \textbf{Walltime def/max (days)}& \textbf{MAX jobs/cpus} & \textbf{Notes} \\
-\hline
-\textbf{general} & 30/30 &  10/64 & default \\
-\hline
-\textbf{scavenge} & 30/30 &  4/320 & preemptable \\
-\hline
-\textbf{\textit{PI}} & none & none & members only \\
-\hline
-\end{tabular}
 
 \end{frame}
 
@@ -961,71 +655,20 @@ Software is setup with \it{module}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Omega: Finding module files}
-There are many module files for the various applications, tools, and
-libraries installed on the FAS clusters.  To find the module file that
-will allow you to run Matlab, use the `modulefind` command:
-
-\begin{verbatim}
-login-0-0$ modulefind matlab
-\end{verbatim}
-
-This will produce output like:
-
-\begin{verbatim}
-/home/apps/fas/Modules:
-Apps/Matlab/R2010b
-Apps/Matlab/R2012b
-Apps/Matlab/R2014a
-\end{verbatim}
-
-You can get a listing of available module files with:
-\begin{verbatim}
-login-0-0$ module avail
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Grace, Ruddle, Farnam: Finding module files}
-There are many module files for the various applications, tools, and
-libraries installed on thw clusters.  To find the module file that
-will allow you to run Bowtie, use the `module avail` command:
-
-\begin{verbatim}
-[rdb9@grace0 ~]$ module avail matlab
-
----------------------------------------------------------------- /gpfs/apps/hpc/Modules ----------------------------------------------------------------
-   Apps/Matlab/R2013b    Apps/Matlab/R2014a    Apps/Matlab/R2015a (D)    Apps/Matlab/R2015b    MatlabPkg/SPM/8    MatlabPkg/SPM/12 (D)
-
-  Where:
-   (D):  Default Module
-
-\end{verbatim}
-
-You can get a listing of all available module files with:
-\begin{verbatim}
-grace1$ module avail
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
+\begin{frame}[fragile]
 \frametitle{Example ``module load'' commands}
 Here are some ``module load'' commands for scripting languages:
 
 \begin{verbatim}
-module load Langs/Python
-module load Langs/Perl
-module load Apps/R
-module load Apps/Matlab
-module load Apps/Mathematica
+module load Python/3.5.1-foss-2016b
+module load Perl
+module load Bowtie2/2.2.9-foss-2016a
 \end{verbatim}
 
-You can specify a specific version:
+You can ask for the default or specify a specific version:
 \begin{verbatim}
-module load Langs/Python/2.7.6
+module load Python
+module load Python/3.5.1-foss-2016b
 \end{verbatim}
 
 \end{frame}
@@ -1080,40 +723,6 @@ http://research.computing.yale.edu/support/hpc/user-guide
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Running graphical programs (Torque)}
-Enable X11 forwarding from ssh and qsub:
-\begin{verbatim}
-laptop$ ssh -Y netid@omega.hpc.yale.edu
-login-0-0$ qsub -X -I -q fas_devel
-\end{verbatim}
-
-Faster alternative:
-\begin{verbatim}
-laptop$ ssh netid@omega.hpc.yale.edu
-login-0-0$ qsub -I -q fas_devel
-\end{verbatim}
-
-Once job is running, execute from a different terminal window:
-\begin{verbatim}
-laptop$ ssh -Y netid@omega.hpc.yale.edu
-laptop$ ssh -Y compute-XX-YY
-\end{verbatim}
-
-where ``compute-XX-YY'' is the node allocated to your job.
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Running graphical programs (LSF)}
-Enable X11 forwarding from ssh and bsub:
-\begin{verbatim}
-laptop$ ssh -Y netid@grace.hpc.yale.edu
-grace1$ bsub -XF -Is -q interactive bash
-\end{verbatim}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Cluster Filesystems}
 Each cluster has a number of different filesystems for you to use, with different
@@ -1136,108 +745,6 @@ Consider using local HD or ramdisk for intermediate files.  Also consider avoidi
 
 For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
 
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Hints for working with YCGA Genomic data}
-\begin{itemize}
-\item Data layout, and avoiding copies
-\item Improving IO
-\item Genome reference files
-\item Standard processing pipelines
-\end{itemize}
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Access data directly rather than copying}
-
-You'll typically get an email from YCGA with links:
-
-\begin{verbatim}
-
-http://sysg1.cs.yale.edu:2011/showrun?run=ba_sequencers5/sequencerX 
-  /runs/150928_D00536_0191_BC79VRANXX 
-Regarding samples:
-
-Sample_7777  …
-\end{verbatim}
-
-The sample url looks like:
-
-\begin{verbatim}
-http://sysg1.cs.yale.edu:2011/gen?fullPath=ba_sequencers5/sequencerX
-  /runs/150928_D00536_0191_BC79VRANXX/Data/Intensities/BaseCalls
-  /Unaligned/Project_PI/Sample_7777 ...
-
-\end{verbatim}
-\end{frame}
-
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Access data directly rather than copying}
-
-Instead of downloading them, you can access them directly on the cluster, by (trivially) 
-converting the url to a path:
-
-\begin{verbatim}
-cd /ycga-ba/ba_sequencers5/sequencerX
-  /runs/150928_D00536_0191_BC79VRANXX/Data/Intensities/BaseCalls
-  /Unaligned/Project_PI/Sample_7777
-\end{verbatim}
-
-Path conversion rules
-\begin{verbatim}
-sequencers... -> /panfs/sequencers...
-ba_sequencers... -> /ycga-ba/ba_sequencers...
-\end{verbatim}
-
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Access data directly rather than copying (cont)}
-
-Your data is in multiple compressed fastq files, typically in a directory
-like Unaligned/Project\_PIname/Sample\_samplename.  
-
-\begin{verbatim}
-7777_GCCAAT-GCCAAT_L008_R1_001.fastq.gz
-7777_GCCAAT-GCCAAT_L008_R1_002.fastq.gz
-7777_GCCAAT-GCCAAT_L008_R1_003.fastq.gz
-7777_GCCAAT-GCCAAT_L008_R1_004.fastq.gz
-...
-7777_GCCAAT-GCCAAT_L008_R2_001.fastq.gz
-7777_GCCAAT-GCCAAT_L008_R2_002.fastq.gz
-7777_GCCAAT-GCCAAT_L008_R2_003.fastq.gz
-7777_GCCAAT-GCCAAT_L008_R2_004.fastq.gz
-...
-\end{verbatim}
-\end{frame}
-
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Use Links to avoid copying fastq files}
-Many users incur a 2-3x space increase:
-
-\begin{verbatim}
-$ zcat Sample*_R2_0??.fastq.gz >  /scratchspace/Sample.fastq
-\end{verbatim}
-
-Use soft links instead
-\begin{verbatim}
-$ mkdir Project/Sample_7777
-$ cd Project/Sample_7777
-$ ln -s /path/to/sample/*.fastq.gz .
-\end{verbatim}
-
-Many programs can use compressed split files directly.  If they can't, use this trick
-\begin{verbatim}
-$ bwa ... <(zcat *R1_*.fastq.gz) <(zcat *R2_*.fastq.gz) 
-\end{verbatim}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -1304,7 +811,7 @@ doing standard analyses:
 \begin{frame}[fragile]
 \frametitle{Wait, where is the Parallelism?}
 
-Qsub/Bsub/Sbatch can allocate multiple cores and nodes, but the script runs on one core on one node sequentially.  
+Sbatch can allocate multiple cores and nodes, but the script runs on one core on one node sequentially.  
 \vspace{0.1in}
 Simply allocating more nodes or cores DOES NOT make jobs faster.
 \vspace{.1in}
@@ -1319,14 +826,14 @@ Two classes of parallelism:
 Some options:
 \begin{itemize}
 \item Submit many batch jobs simultaneously (not good)
-\item Use job arrays, or SimpleQueue (much better)
+\item Use job arrays, or dSQ (much better)
 \item Submit a parallel version of your program (great if you have one)
 \end{itemize}
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
+\begin{frame}<presentation:0>[fragile]
 \frametitle{Job Arrays}
 
 \begin{itemize}
@@ -1336,22 +843,19 @@ Some options:
 
 Submit jobs like this:
 \begin{verbatim}
-Torque: qsub -t 1-100 ...
 Slurm: sbatch --array=1-100 ..
-LSF: bsub -J "job [1-100]" ...
 \end{verbatim}
 
-You batch script uses an environment variable:
+Your batch script uses an environment variable:
 \begin{verbatim}
-./mycommand -i input.${PBS_ARRAYID} \
-    -o output.${PBS_ARRAYID}
+./mycommand -i input.${SLURM_ARRAY_TASK_ID} \
+    -o output.${SLURM_ARRAY_TASK_ID}
 \end{verbatim}
-Other BQS are similar
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{SimpleQueue}
+\frametitle{dSQ (aka Dead Simple Queue)}
 
 \begin{itemize}
 \item Useful when you have many similar, independent jobs to run
@@ -1366,36 +870,35 @@ Advantages
 \item Keeps track of status of individual jobs
 \item More flexible than job arrays
 \item Automatically schedules jobs onto a single PBS allocation
+\item dSQ replaces a previous tool ``SimpleQueue''
 \end{itemize}
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Using SimpleQueue}
+\frametitle{Using dSQ}
 
 \begin{enumerate}
-\item Create file containing list of commands to run (jobs.list)
+\item Create file containing list of commands to run (jobs.txt)
 \begin{verbatim}
-cd ~/mydir/myrun; prog arg1 arg2 -o job1.out  
-cd ~/mydir/myrun; prog arg1 arg2 -o job2.out  
+prog arg1 arg2 -o job1.out  
+prog arg1 arg2 -o job2.out  
 ...
 \end{verbatim}
 \item Create launch script
 \begin{verbatim}
-module load Tools/SimpleQueue
-sqCreateScript -q queuename -n 4 jobs.list > run.sh
+module load dSQ
+dSQ --taskfile jobs.txt [slurm args] > run.sh
 \end{verbatim}
 
 \item Submit launch script
 \begin{verbatim}
-qsub run.sh    # Omega, Ruddle
-bsub < run.sh  # Grace
-sbatch run.sh  # Farnam
+sbatch run.sh  
 \end{verbatim}
 \end{enumerate}
 
-For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
+For more info, see \url{http://research.computing.yale.edu/support/hpc/user-guide/dead-simple-queue}
 
 \end{frame}
 
@@ -1405,12 +908,7 @@ For more info, see \url{http://research.computing.yale.edu/hpc/faq/simplequeue}
 \begin{itemize}
 \item Many modern programs are able to use multiple cpus on one node.
 \item Typically specify something like \verb+-p 20+ or \verb+-t 20+ (see man page)
-\item You must allocate matching number of cores:
-\begin{itemize}
-\item Torque: -lnodes=1:ppn=20
-\item LSF:    -n 20
-\item Slurm:  -c 20
-\end{itemize}
+\item You must allocate matching number of cores: -c 20
 \end{itemize}
 
 \begin{block}{}
@@ -1430,7 +928,7 @@ myapp -t 20 ...
 \item Some programs use MPI to run on many nodes
 \item Impressive speedups are possible
 \item MPI programs are compiled and run under MPI
-\item MPI must cooperate with BQS
+\item MPI must cooperate with Slurm
 \end{itemize}
 
 \begin{block}{}
@@ -1507,6 +1005,7 @@ mpirun ./mpiprog ...
 \frametitle{To get help}
 \begin{itemize}
 \item Send an email to: \url{hpc@yale.edu}
+\item Email me: \url{robert.bjornson@yale.edu}
 \item Read documentation at: \url{http://research.computing.yale.edu/hpc-support}
 \item Come to office hours: \url{http://research.computing.yale.edu/support/office-hours-getting-help}
 \end{itemize}
@@ -1518,7 +1017,7 @@ mpirun ./mpiprog ...
 
 \begin{itemize}
 \item This presentation: https://github.com/ycrc/Intro-Bootcamp
-\item Table of equivalent BQS commands: https://slurm.schedmd.com/rosetta.pdf
+\item Table of equivalent Batch Queueing commands: https://slurm.schedmd.com/rosetta.pdf
 \item Linux: http://www.ee.surrey.ac.uk/Teaching/Unix
 \item Slurm: http://slurm.schedmd.com
 \item Recommended Books
