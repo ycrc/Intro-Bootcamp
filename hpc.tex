@@ -518,8 +518,13 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \item How many cores and how much memory per user
 \item Maximum walltime
 \end{itemize}
-\item PI partitions are for specific groups
-\item scavenge allows using idle nodes from other partitions
+\begin{description}
+\item [general/day/long] default, common usage
+\item [gpu] nodes with gpus
+\item [bigmem] nodes with large RAM
+\item [\textit{PI}] reserved for specific groups
+\item [scavenge] uses idle nodes from other partitions (preempted)
+\end{description}
 \item See cluster page for specifics
 \end{itemize}
 
