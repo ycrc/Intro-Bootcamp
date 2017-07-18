@@ -19,6 +19,8 @@ module avail R
 module load Langs/R
 R
 
+show env vars for squeue and sacct
+
 exit
 
 # (on farnam login node) 
@@ -29,14 +31,18 @@ sbatch batch.sh
 sbatch array.sh
 
 # setup and submit SQ job
-module load Tools/SimpleQueue
+module load dSQ
 
-sqCreateScript -h 
-sqCreateScript -n 10 tasklist.txt > runsq.sh
+dSQ -h 
+dSQ --taskfile tasklist.txt --mem-per-cpu=4g > runsq.sh
 sbatch runsq.sh
 
 # submit multithreaded job
 sbatch stress1.sh
 sbatch stress20.sh
+
+# do mpi
+make ring
+sbatch runmpi.sh
 
 # 
