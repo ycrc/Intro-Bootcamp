@@ -1,0 +1,2 @@
+export SACCT_FORMAT="JobID%-20,JobName,User,Partition,NodeList,Elapsed,State,ExitCode,MaxRSS, AllocTRES%32"
+export SQUEUE_FORMAT="%.16i %.12P %.12j %.8u %.2t %.12M %.12l %20R %.6D %.6C %.10m %8b %8f"
