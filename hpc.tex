@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{June 2017}
+\date{July 2017}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -106,28 +106,28 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (June 2017)}
-\begin{tabular}{|c|c|c|c|c|}
+\frametitle{Summary of Yale Clusters (July 2017)}
+\begin{tabular}{|c|c|c|c|c|c|}
 \hline
-& \textbf{Omega} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} \\
+& \textbf{Omega} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} & \textbf{Milgram} \\
 \hline
-\textbf{Role} & FAS & FAS & LS/Med & YCGA  \\
+\textbf{Role} & FAS & FAS & LS/Med & YCGA & Psych \\
 \hline
-\textbf{~Total nodes} & 1028 & 216 & 320+ & 156+  \\
+\textbf{~Total nodes} & 1028 & 216 & 320+ & 156+ & 60 \\
 \hline
-\textbf{~Total cores} & 8500 & 4700 & 5300 & 3000 \\
+\textbf{~Total cores} & 8500 & 4700 & 5300 & 3000 & ~1500 \\
 \hline
-\textbf{Cores/node} & 8 & 20 & 8-20 & 20 \\
+\textbf{Cores/node} & 8 & 20 & 8-20 & 20 & 20-28 \\
 \hline
-\textbf{Mem/node} & 36 GB/48 GB & 128 GB & \multicolumn{2}{c}{128-1500GB}  \\
+\textbf{GB/node} & 128 & 128-256 & \multicolumn{2}{|c|}{128-1500} & 128-256 \\
 \hline
-\textbf{Network} & QDR IB & FDR IB& \multicolumn{2}{c}{10 Gb EN}  \\
+\textbf{Network} & QDR IB & FDR IB & \multicolumn{3}{|c|}{10 Gb EN}   \\
 \hline
-\textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS \\
+\textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS & GPFS \\
 \hline
-\textbf{Batch queueing} & Torque & Slurm & Slurm & Slurm \\
+\textbf{Batch queueing} & Torque & \multicolumn{4}{|c|}{Slurm}  \\
 \hline
-\textbf{Duo MFA?} & No & No & No & Yes \\
+\textbf{Duo MFA?} & No & No & No & Yes & No \\
 \hline
 \end{tabular}
 
@@ -147,14 +147,15 @@ Tentative schedule, coinciding with scheduled maintenance periods:
 \begin{itemize}
 \item Farnam: Done
 \item Ruddle: Done
-\item Grace: June 15
-\item Omega: ? 
+\item Grace: Done
+\item Milgram: Sept 2017
+\item Omega: Dec 2017?
 \end{itemize}
 
 We are setting up small slurm clusters for testing:
 \begin{itemize}
-\item grace-next.hpc.yale.edu
-\item omega-next.hpc.yale.edu (coming soon)
+\item omega-next.hpc.yale.edu 
+\item milgram-next.hpc.yale.edu (coming soon)
 \end{itemize}
 \end{frame}
 
@@ -225,7 +226,7 @@ For more information on using PuTTY see:
 \item Connect using private key
 \end{enumerate}
 
-This can be tricky.  See http://research.computing.yale.edu/support/hpc/user-guide
+This can be tricky the first time.  See http://research.computing.yale.edu/support/hpc/user-guide
 for the exact steps or contact us if you have problems.
 
 \end{frame}
@@ -444,7 +445,7 @@ http://research.computing.yale.edu/support/hpc/user-guide/transfer-files-or-clus
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Summary of Slurm commands}
 \begin{tabular}{|l|l|}
 \hline
@@ -460,15 +461,27 @@ Status of a user's jobs & squeue -u \textit{NETID} \\
 \hline
 Cancel a job & scancel \textit{JOBID} \\
 \hline
-Get queue info & squeue -p \textit{PART} \\
+Get job info for partition & squeue -p \textit{PART} \\
 \hline
-Get partition info & sinfo -p {PART} \\
+Get node info for partition & sinfo -p {PART} \\
 \hline
-Get node info & sinfo -N \\
+Get individual node info & sinfo -N -n \textit{NODE} \\
 \hline
 Get job info & sacct -j \textit{JOBID} -l \\
 \hline
 \end{tabular}
+
+\vspace{0.1in}
+Useful formatting:
+\smallfont
+\begin{verbatim}
+export SACCT_FORMAT="JobID%-20,JobName,User,Partition,NodeList,Elapsed,\
+  State,ExitCode,MaxRSS, AllocTRES%32"
+
+export SQUEUE_FORMAT="%.16i %.12P %.12j %.8u %.2t %.12M %.12l %20R %.6D \
+  %.6C %.10m %8b %8f"
+\end{verbatim}
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -568,7 +581,7 @@ sbatch -c 8 --mem-per-cpu=8G t.sh
 \begin{itemize}
 \item Each job is assigned a maximum walltime
 \item If not specified, it will get the default walltime limit
-\item The job is killed if that is exceeded
+\item The job is killed if time is exceeded
 \item You can specify longer walltime to avoid the job being killed
 \item You can specify shorter walltime to get resources faster
 \end{itemize}
