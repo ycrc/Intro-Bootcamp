@@ -9,14 +9,18 @@ squeue -l -u rdb9
 squeue -l
 
 # (on farnam login node) allocate an interactive session
-srun --pty -p interative bash
+
+srun --pty bash
+(fails) 
+
+srun --pty --mem=8g -p interative bash
 
 # (on allocation) list my jobs
 squeue -l -u rdb9
 
 # (on allocation) 
-module avail R
-module load Langs/R
+module avail R/
+module load R
 R
 
 show env vars for squeue and sacct
@@ -42,6 +46,7 @@ sbatch stress1.sh
 sbatch stress20.sh
 
 # do mpi
+module load OpenMPI
 make ring
 sbatch runmpi.sh
 

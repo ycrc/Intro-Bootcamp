@@ -33,10 +33,15 @@ void func(int me, int proc) {
 
 int main(int argc, char **argv) {
   int proc, me;
+  char host[64];
 
   MPI_Init (&argc, & argv);
   MPI_Comm_size (MPI_COMM_WORLD, &proc);
   MPI_Comm_rank (MPI_COMM_WORLD, &me);
+
+  gethostname(host, sizeof(host));
+  printf("Hello from %s, node %d of %d\n", host, me, proc);
+  fflush(stdout);
 
   func(me, proc);
     

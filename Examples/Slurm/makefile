@@ -1,8 +1,8 @@
 
-dSQ:
+dSQ: tasklist.txt
 	dSQ --taskfile tasklist.txt > runsq.sh
 
-ring:
+ring: ring.c
 	mpicc -o ring ring.c
 
 clean:
