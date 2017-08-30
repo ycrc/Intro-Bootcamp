@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{July 2017}
+\date{August 2017}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -106,7 +106,7 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (July 2017)}
+\frametitle{Summary of Yale Clusters (Aug 2017)}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 & \textbf{Omega} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} & \textbf{Milgram} \\
@@ -126,6 +126,8 @@ Some of the limitations of clusters are:
 \textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS & GPFS \\
 \hline
 \textbf{Batch queueing} & Torque & \multicolumn{4}{|c|}{Slurm}  \\
+\hline
+\textbf{GPU nodes} & No & Several & Few & No & No \\
 \hline
 \textbf{Duo MFA?} & No & No & No & Yes & No \\
 \hline
@@ -152,11 +154,8 @@ Tentative schedule, coinciding with scheduled maintenance periods:
 \item Omega: Dec 2017?
 \end{itemize}
 
-We are setting up small slurm clusters for testing:
-\begin{itemize}
-\item omega-next.hpc.yale.edu 
-\item milgram-next.hpc.yale.edu (coming soon)
-\end{itemize}
+Omega-next.hpc.yale.edu can be used for slurm testing.
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -359,7 +358,8 @@ To exit, type exit or ctrl-d
 \begin{verbatim}
 farnam-0:~ $ srun --pty -p interactive --mem=8g bash
 c01n01$ module load Bowtie2
-c01n01$ bowtie2 -1 data/sample_R1.fastq -2 data/sample_R2.fastq -x hg19/genome > output.sam
+c01n01$ bowtie2 -1 data/sample_R1.fastq -2 data/sample_R2.fastq \
+    -x hg19/genome > output.sam
 c01n01$ exit
 farnam-0:~ $
 \end{verbatim}
@@ -438,7 +438,7 @@ laptop$ rsync -av -e 'ssh -i ~/.ssh/id_rsa' ~/workdir \
 \item For Windows, WinSCP is available from the Yale Software
 Library: \url{http://software.yale.edu}.
 
-\item Graphical copy tools usually need configuration when used with Duo.  See:
+\item Graphical copy tools usually need configuration when used with Duo (Ruddle).  See:
 http://research.computing.yale.edu/support/hpc/user-guide/transfer-files-or-cluster
 \end{itemize}
 
@@ -532,6 +532,7 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \item Maximum walltime
 \end{itemize}
 \begin{description}
+\item [interactive] for interactive jobs (srun)
 \item [general/day/long] default, common usage
 \item [gpu] nodes with gpus
 \item [bigmem] nodes with large RAM
@@ -549,9 +550,16 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \begin{itemize}
 \item The -N, -n, -c flags often cause confusion.  They change the size of your allocation and its placement.
 \item By default, you get 1 task, having 1 core, running on 1 node
-\item -N \textit{N} forces each task to be scheduled onto N nodes.  Rarely useful.
 \item -n \textit{n} specifies n tasks.  This is normally only useful with MPI.
-\item -c \textit{c} causes each task to have c cpus/cores.  This is very useful for multithreaded programs
+\item -c \textit{c} causes each task to have c cpus/cores (on a node).  This is very useful for multithreaded programs
+\item -N \textit{N} forces job to be scheduled onto N nodes.  Rarely useful.
+\end{itemize}
+
+Examples:
+\begin{itemize}
+\item \verb+sbatch -c 20+: a single 20-core task on 1 node
+\item \verb+sbatch -c 20 -n 4+: 4 20-core tasks, on multiple nodes
+\item \verb+sbatch -n 40+ : 40 1-core tasks, spread indeterminately among nodes
 \end{itemize}
 \end{frame}
 
@@ -562,7 +570,7 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \item It's crucial to understand memory required by your program.
 \item Nodes (and thus memory) are often shared
 \item Jobs have (small) default memory limits that you can/should override
-\item Jobs exceeding their request are killed.  Common errors: ``bus error'', or ``Exeeded step memory at some point''
+\item Jobs exceeding their request are killed.  Common errors: ``bus error'', or ``Exceeded step memory at some point''
 \item /usr/bin/time -a \textit{cmd ...} will show memory usage (maxresident)
 \item --mem=8g requests 8GB per node
 \item --mem-per-cpu=8g requests 8GB per cpu.  Multiplied by cores (-c)
@@ -716,10 +724,7 @@ module load Python/3.5.1-foss-2016b
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Run your program/script}
-When you're finally ready to run your script, you may have some
-trouble determining the correct command line, especially if you want to
-pass arguments to the script.  Here are some examples:
+\frametitle{Interactive tools (Python/Matlab/R/Mathematica) as batch jobs}
 
 \begin{verbatim}
 compute-20-1$ python compute.py input.dat
@@ -981,6 +986,23 @@ module load MPI/OpenMPI
 mpirun ./mpiprog ...
 \end{verbatim}
 \end{block}{}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{GPU-enabled programs}
+Many programs are now enabled for GPUs: imaging, machine learning...
+
+To use them, your program must be explicitly gpu enabled and compiled.
+Your slurm job must request a partition with gpu nodes and explicitly request gpus:
+
+\begin{verbatim}
+srun --pty -p gpu --gres=gpu:2 bash
+\end{verbatim}
+
+For more info see:
+http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
+
 \end{frame}
 
 %----------- slide --------------------------------------------------%
