@@ -13,15 +13,21 @@ squeue -l
 srun --pty bash
 (fails) 
 
-srun --pty --mem=8g -p interative bash
-
 # (on allocation) list my jobs
 squeue -l -u rdb9
 
 # (on allocation) 
 module avail R/
 module load R
+which R
 R
+
+module list
+module purge
+module load RStudio
+ssh -Y farnam
+srun --x11
+rstudio
 
 show env vars for squeue and sacct
 
