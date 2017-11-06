@@ -2,7 +2,7 @@ date; sleep 2; date
 date; sleep 25; date
 date; sleep 32; date
 date; sleep 17; date
-date; sleep 8; date
+date; sleep 8; date; exit 1
 date; sleep 37; date
 date; sleep 9; date
 date; sleep 14; date

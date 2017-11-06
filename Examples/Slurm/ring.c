@@ -13,7 +13,8 @@ void func(int me, int proc) {
 
   MPI_Barrier(MPI_COMM_WORLD);
 
-  for (i=0; i<1000000; ++i) {
+  // 500000 loops takes 30s
+  for (i=0; i<500000; ++i) {
     if (me==0) {
       if (i%10000 == 0) {
         printf("Step %d\n", i);
