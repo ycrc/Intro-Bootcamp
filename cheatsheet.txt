@@ -23,6 +23,9 @@ module avail R/
 module load R
 R
 
+# show x11 forwarding
+ssh -Y, srun --x11, module load RStudio, rstudio
+
 show env vars for squeue and sacct
 
 exit

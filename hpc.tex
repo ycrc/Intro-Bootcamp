@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{August 2017}
+\date{Nov 2017}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -107,15 +107,16 @@ Some of the limitations of clusters are:
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Summary of Yale Clusters (Aug 2017)}
+\smallfont
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-& \textbf{Omega} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} & \textbf{Milgram} \\
+& \textbf{Omega-next} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} & \textbf{Milgram} \\
 \hline
 \textbf{Role} & FAS & FAS & LS/Med & YCGA & Psych \\
 \hline
-\textbf{~Total nodes} & 1028 & 216 & 320+ & 156+ & 60 \\
+\textbf{~Total nodes} & 1028* & 216 & 320+ & 156+ & 60 \\
 \hline
-\textbf{~Total cores} & 8500 & 4700 & 5300 & 3000 & ~1500 \\
+\textbf{~Total cores} & 8500* & 4700 & 5300 & 3000 & ~1500 \\
 \hline
 \textbf{Cores/node} & 8 & 20 & 8-20 & 20 & 20-28 \\
 \hline
@@ -123,38 +124,21 @@ Some of the limitations of clusters are:
 \hline
 \textbf{Network} & QDR IB & FDR IB & \multicolumn{3}{|c|}{10 Gb EN}   \\
 \hline
-\textbf{File system} & Lustre & GPFS & GPFS & NAS + GPFS & GPFS \\
+\textbf{File system} & Lustre+GPFS & GPFS & GPFS & NAS + GPFS & GPFS \\
 \hline
-\textbf{Batch queueing} & Torque & \multicolumn{4}{|c|}{Slurm}  \\
+\textbf{Batch queueing} & \multicolumn{5}{|c|}{Slurm}  \\
 \hline
 \textbf{GPU nodes} & No & Several & Few & No & No \\
 \hline
 \textbf{Duo MFA?} & No & No & No & Yes & No \\
 \hline
 \end{tabular}
-
+\regfont
 \vskip10pt
-
+* Transition from omega to omega-next ongoing
+\vskip 10pt
 Details on each cluster here:
 \url{http://research.computing.yale.edu/hpc-clusters}
-
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Migration to Slurm}
-We will be migrating all Yale clusters to Slurm this year.    
-
-Tentative schedule, coinciding with scheduled maintenance periods:
-\begin{itemize}
-\item Farnam: Done
-\item Ruddle: Done
-\item Grace: Done
-\item Milgram: Sept 2017
-\item Omega: Dec 2017?
-\end{itemize}
-
-Omega-next.hpc.yale.edu can be used for slurm testing.
 
 \end{frame}
 
@@ -183,7 +167,7 @@ To access any of the clusters, you must use \textbf{ssh}.
 From a Mac or Linux machine, you simply use the \textbf{ssh} command:
 
 \begin{verbatim}
-laptop$ ssh netid@omega.hpc.yale.edu
+laptop$ ssh netid@omega-next.hpc.yale.edu
 laptop$ ssh netid@grace.hpc.yale.edu
 laptop$ ssh netid@farnam.hpc.yale.edu
 laptop$ ssh netid@ruddle.hpc.yale.edu
@@ -523,7 +507,7 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \frametitle{Partitions}
 \begin{itemize}
 \item Compute nodes are grouped into partitions
-\item Each cluster has its own set of partitions
+\item Each cluster has its own set of partitions, see page
 \item Jobs are submitted to a specific partition
 \item Each partition has rules:
 \begin{itemize}
@@ -533,13 +517,14 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \end{itemize}
 \begin{description}
 \item [interactive] for interactive jobs (srun)
-\item [general/day/long] default, common usage
+\item [general] default on farnam/ruddle
+\item [day] default on grace/omega-next
+\item [week] long jobs on grace/omega-next
 \item [gpu] nodes with gpus
 \item [bigmem] nodes with large RAM
 \item [\textit{PI}] reserved for specific groups
 \item [scavenge] uses idle nodes from other partitions (preempted)
 \end{description}
-\item See cluster page for specifics
 \end{itemize}
 
 \end{frame}
@@ -548,11 +533,11 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \begin{frame}[fragile]
 \frametitle{Nodes -N, Tasks -n, Cores -c}
 \begin{itemize}
-\item The -N, -n, -c flags often cause confusion.  They change the size of your allocation and its placement.
+\item The sbatch/srun options -N, -n, -c often cause confusion.  They change the size of your allocation and its placement.
 \item By default, you get 1 task, having 1 core, running on 1 node
 \item -n \textit{n} specifies n tasks.  This is normally only useful with MPI.
 \item -c \textit{c} causes each task to have c cpus/cores (on a node).  This is very useful for multithreaded programs
-\item -N \textit{N} forces job to be scheduled onto N nodes.  Rarely useful.
+\item -N \textit{N} forces job tasks to be scheduled onto exactly N nodes.  Rarely useful.
 \end{itemize}
 
 Examples:
@@ -569,12 +554,21 @@ Examples:
 \begin{itemize}
 \item It's crucial to understand memory required by your program.
 \item Nodes (and thus memory) are often shared
-\item Jobs have (small) default memory limits that you can/should override
+\item Jobs have modest default memory limits (5GB/core) that you can override
 \item Jobs exceeding their request are killed.  Common errors: ``bus error'', or ``Exceeded step memory at some point''
-\item /usr/bin/time -a \textit{cmd ...} will show memory usage (maxresident)
 \item --mem=8g requests 8GB per node
 \item --mem-per-cpu=8g requests 8GB per cpu.  Multiplied by cores (-c)
+\end{itemize}
+\end{frame}
 
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Controlling memory usage (cont)}
+
+To determine how much memory your job uses:
+\begin{itemize}
+\item /usr/bin/time -a \textit{cmd ...} (maxresident)
+\item \verb+sacct -j <jobid> -l | less -S+ (MaxRSS) 
 \end{itemize}
 
 To specify 8 cores on one node with 8 GB RAM for each core:
