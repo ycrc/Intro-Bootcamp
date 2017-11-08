@@ -29,6 +29,17 @@
   \titlepage
 \end{frame}
 
+%----------- titlepage ----------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Getting the Workshop Slides and Demos}
+\begin{itemize}
+\item https://github.com/ycrc/Intro-Bootcamp
+\item clone (if you know how)
+\item or download zip and unpack
+\item slides are hpc.pdf
+\end{itemize}
+\end{frame}
+
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{What is the Yale Center for Research Computing?}
@@ -745,7 +756,7 @@ Two different ways:
 \item X11 forwarding
 \begin{itemize}
 \item easy setup
-\item ssh -Y to cluster, then qsub -Y/bsub -XF/srun --x11
+\item \verb+ssh -Y+ to cluster, then \verb+srun --x11+
 \item works fine for most applications
 \item bogs down for very rich graphics
 \end{itemize}
