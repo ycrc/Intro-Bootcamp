@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Nov 2017}
+\date{Jan 2018}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -136,7 +136,7 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (Aug 2017)}
+\frametitle{Summary of Yale Clusters (Jan 2018)}
 \smallfont
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
@@ -396,20 +396,16 @@ farnam-0:~ $
 
 \begin{block}{}
 \begin{verbatim}
+
 #!/bin/bash
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=robert.bjornson@yale.edu
+#SBATCH -t 3:00 # 3 minutes
+#SBATCH --mem=10g
 
-#SBATCH --mail-type all --mail-user robert.bjornson@yale.edu
-#SBATCH -J bowtie
-#SBATCH -c 20 
-#SBATCH -p general
-#SBATCH --mem 8g 
+module load R
 
-module load Bowtie2
-
-time bowtie2 -p 20 -1 ../data/sample_R1.fastq \
-   -2 ../data/sample_R2.fastq -x ../hg19/genome \
-   > output.sam
-
+Rscript myscript.R
 \end{verbatim}
 \end{block}{}
 \end{frame}
@@ -423,7 +419,7 @@ $ sbatch batch.sh
 Submitted batch job 42
 $ squeue -j 42
 JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-   42   general   bowtie     rdb9  R       0:03      1 c13n10
+   42   general   batch     rdb9  R       0:03      1 c13n10
 \end{verbatim}
 \vskip14pt
 \regfont
@@ -586,8 +582,8 @@ Examples:
 \item Nodes (and thus memory) are often shared
 \item Jobs have modest default memory limits (5GB/core) that you can override
 \item Jobs exceeding their request are killed.  Common errors: ``bus error'', or ``Exceeded step memory at some point''
-\item --mem=8g requests 8GB per node
-\item --mem-per-cpu=8g requests 8GB per cpu.  Multiplied by cores (-c)
+\item \verb+--mem=8g+ requests 8GB per node
+\item \verb+--mem-per-cpu=8g+ requests 8GB per cpu.  Multiplied by cores (-c)
 \end{itemize}
 \end{frame}
 
@@ -940,6 +936,7 @@ Advantages
 \item Keeps track of status of individual jobs
 \item More flexible than job arrays
 \item Automatically schedules jobs onto a single PBS allocation
+\item Time limit is per individual \em{job}
 \item dSQ replaces a previous tool ``SimpleQueue''
 \end{itemize}
 
