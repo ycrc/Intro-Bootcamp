@@ -8,3 +8,4 @@ ring: ring.c
 clean:
 	-rm -f *.out tasklist.txt.* SBATCH_SimpleQueue* *status.tsv
 	-rm -rf SQ_Files*  runsq.sh ring
+	-rm -rf Results/* *.out 

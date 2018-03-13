@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -N 4 -n 4
+#SBATCH -n 32
 #SBATCH --mem=8g
 
 module load OpenMPI

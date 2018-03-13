@@ -1,4 +1,5 @@
 
+
 # (on my computer) ssh to farnam login node
 ssh rdb9@farnam.hpc.yale.edu
 
@@ -46,14 +47,19 @@ module load dSQ
 dSQ -h 
 dSQ --jobfile bwajobs.txt --mem=16g > runsq.sh
 sbatch runsq.sh
+(job 13 will fail because input not found)
+
+dSQAutopsy bwajobs.txt job_*status.tsv > failedjobs.txt
 
 # submit multithreaded job
+
 sbatch bwa1.sh
 sbatch bwa20.sh
+sbatch bwa_n20.sh
 
 # do mpi
 module load OpenMPI
 make ring
 sbatch runmpi.sh
 
-# 
+o# 

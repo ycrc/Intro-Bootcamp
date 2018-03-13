@@ -1,0 +1,2 @@
+unset SQUEUE_FORMAT
+unset SACCT_FORMAT
