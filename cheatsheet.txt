@@ -44,12 +44,12 @@ sbatch array.sh
 module load dSQ
 
 dSQ -h 
-dSQ --taskfile tasklist.txt --mem-per-cpu=4g > runsq.sh
+dSQ --jobfile bwajobs.txt --mem=16g > runsq.sh
 sbatch runsq.sh
 
 # submit multithreaded job
-sbatch stress1.sh
-sbatch stress20.sh
+sbatch bwa1.sh
+sbatch bwa20.sh
 
 # do mpi
 module load OpenMPI
