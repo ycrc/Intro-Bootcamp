@@ -370,9 +370,8 @@ To exit, type exit or ctrl-d
 \frametitle{Slurm: Example of an interactive job}
 \begin{verbatim}
 farnam-0:~ $ srun --pty -p interactive --mem=8g bash
-c01n01$ module load Bowtie2
-c01n01$ bowtie2 -1 data/sample_R1.fastq -2 data/sample_R2.fastq \
-    -x hg19/genome > output.sam
+c01n01$ module load BWA
+c01n01$ module load SAMtools BWA; bwa mem BWAIndex/genome.fa Data/reads01.fa > reads01.sam
 c01n01$ exit
 farnam-0:~ $
 \end{verbatim}
