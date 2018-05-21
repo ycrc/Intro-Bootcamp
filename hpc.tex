@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Mar 2018}
+\date{May 2018}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -34,8 +34,8 @@
 \frametitle{Getting the Workshop Slides and Demos}
 \begin{itemize}
 \item https://github.com/ycrc/Intro-Bootcamp
-\item clone (if you know how)
-\item or download zip and unpack
+\item download zip and unpack
+\item or: git clone https://github.com/ycrc/Intro-Bootcamp.git
 \item slides are hpc.pdf
 \end{itemize}
 \end{frame}
@@ -116,6 +116,8 @@ Here are some reasons to go to that effort:
 \item Want to use software installed on the cluster
 \item Want to access data stored on the cluster
 \item Want to use GPUs
+\item Cluster use is free (within reason)
+\item YCRC user support
 \end{itemize}
 \end{frame}
 
@@ -128,14 +130,33 @@ Some of the limitations of clusters are:
 \begin{itemize}
 \item Cannot run Windows or Mac programs
 \item Not for persistent services (DBs or web servers)
-\item Not ideal for interactive, graphical tasks
+\item Not ideal for graphical tasks
 \item Jobs that run for weeks can be a problem (unless checkpointed)
 \end{itemize}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (Jan 2018)}
+\frametitle{Summary of Yale Clusters (May 2018)}
+\begin{tabular}{|l|l|l|r|}
+\textbf{Cluster} & \bf{Users} & \textbf{Role} & \textbf{CPUs} \\
+\hline
+Omega & FAS & Highly Parallel/MPI & 6,500 \\ 
+Grace & FAS & General Purpose & 10,000 \\
+Farnam & YSM/LS & General Purpose & 5,500 \\
+Ruddle & YCGA & Sequence Data & 3,000 \\ 
+Milgram & Psychology & HIPAA Data & 1,600 \\
+\end{tabular}
+\regfont
+\vskip 10pt
+Details on each cluster here:
+\url{http://research.computing.yale.edu/hpc-clusters}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}<presentation:0>
+\frametitle{Summary of Yale Clusters (May 2018)}
 \smallfont
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
@@ -181,9 +202,9 @@ Accounts are free of charge to Yale researchers.
 Request an account at: \url{http://research.computing.yale.edu/account-request}.
 
 \vskip10pt
+
 After your account has been approved and created, you will receive
-an email describing how to access your account.  This may involve setting up ssh keys or 
-using a secure login application.  Details vary by cluster.
+an email describing how to access your account.  This will involve setting up ssh keys Details vary by cluster.
 
 \vskip10pt
 If you need help setting up or using ssh, send an email to: \url{hpc@yale.edu}.
@@ -196,17 +217,15 @@ To access any of the clusters, you must use \textbf{ssh}.
 From a Mac or Linux machine, you simply use the \textbf{ssh} command:
 
 \begin{verbatim}
-laptop$ ssh netid@omega-next.hpc.yale.edu
-laptop$ ssh netid@grace.hpc.yale.edu
-laptop$ ssh netid@farnam.hpc.yale.edu
-laptop$ ssh netid@ruddle.hpc.yale.edu
+laptop$ ssh netid@{omega,grace,etc}.hpc.yale.edu
 \end{verbatim}
 
-From a Windows machine we recommend using putty: \url{http://www.putty.org}.
+From a Windows machine we recommend using mobaXterm
+\url{https://mobaxterm.mobatek.net} or putty: \url{http://www.putty.org}.
 
 \vskip10pt
-For more information on using PuTTY see:
-\url{http://research.computing.yale.edu/hpc-support/user-guide/secure-shell-for-microsoft-windows}
+For more information on mobaxterm, see:
+\url{https://research.computing.yale.edu/support/hpc/user-guide/connect-windows}
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -288,23 +307,23 @@ Success. Logging you in...
 Two ways to run jobs on a cluster:
 
 Interactive:
-\begin{itemize}
+\begin{enumerate}
 \item you request an allocation
 \item system grants you one or more nodes
 \item you are logged onto one of those nodes
 \item you run commands
 \item you exit and system automatically releases nodes
-\end{itemize}
+\end{enumerate}
 
 Batch:
-\begin{itemize}
+\begin{enumerate}
 \item you write a job script containing commands
 \item you submit the script
 \item system grants you one or more nodes
 \item your script is automatically run on one of the nodes
 \item your script terminates and system releases nodes
 \item system sends a notification via email
-\end{itemize}
+\end{enumerate}
 
 \end{frame}
 
@@ -317,7 +336,8 @@ Interactive jobs:
 \item like a remote session
 \item require an active connection
 \item for development, debugging, or 
-interactive environments like R and Matlab 
+interactive environments like R and Matlab
+\item one or a few at a time 
 \end{itemize}
 \vskip10pt
 
@@ -443,10 +463,9 @@ laptop$ rsync -av -e 'ssh -i ~/.ssh/id_rsa' ~/workdir \
 
 \item Cyberduck is a good graphical tool for Mac or Windows.  \url{https://cyberduck.io}
 
-\item For Windows, WinSCP is available from the Yale Software
-Library: \url{http://software.yale.edu}.
+\item For Windows, you can use Mobaxterm for file transfer. 
 
-\item Graphical copy tools usually need configuration when used with Duo (Ruddle).  See:
+\item Graphical copy tools often need configuration when used with Duo (Ruddle).  See:
 http://research.computing.yale.edu/support/hpc/user-guide/transfer-files-or-cluster
 \end{itemize}
 
@@ -515,6 +534,8 @@ Interactive job & srun -{}-pty bash \\
 \hline
 Job name & -J \textit{NAME} \\
 \hline
+Node constraint & -C \textit{type} \\
+\hline
 \end{tabular}
 
 \vskip10pt
@@ -531,7 +552,7 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \frametitle{Partitions}
 \begin{itemize}
 \item Compute nodes are grouped into partitions
-\item Each cluster has its own set of partitions, see page
+\item Each cluster has its own set of partitions: \verb+sinfo -s+ or webpage.
 \item Jobs are submitted to a specific partition
 \item Each partition has rules:
 \begin{itemize}
@@ -542,8 +563,8 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \begin{description}
 \item [interactive] for interactive jobs (srun)
 \item [general] default on farnam/ruddle
-\item [day] default on grace/omega-next
-\item [week] long jobs on grace/omega-next
+\item [day] default on grace/omega
+\item [week] long jobs on grace/omega
 \item [gpu] nodes with gpus
 \item [bigmem] nodes with large RAM
 \item [\textit{PI}] reserved for specific groups

@@ -25,9 +25,10 @@ R
 
 module list
 module purge
-module load RStudio
+
 ssh -Y farnam
 srun --x11
+module load RStudio
 rstudio
 
 show env vars for squeue and sacct
@@ -61,5 +62,4 @@ sbatch bwa_n20.sh
 module load OpenMPI
 make ring
 sbatch runmpi.sh
-
-o# 
+ 
