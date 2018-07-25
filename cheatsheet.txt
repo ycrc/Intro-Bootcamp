@@ -39,6 +39,8 @@ exit
 # submit a batch job
 sbatch batch.sh
 
+sacct -j jobid -l | less -S
+
 # submit a job array job
 sbatch array.sh
 

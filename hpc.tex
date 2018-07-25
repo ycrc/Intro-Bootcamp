@@ -494,7 +494,7 @@ Get node info for partition & sinfo -p {PART} \\
 \hline
 Get individual node info & sinfo -N -n \textit{NODE} \\
 \hline
-Get job info & sacct -j \textit{JOBID} -l \\
+Get job info & sacct -j \textit{JOBID} -l | less -S \\
 \hline
 \end{tabular}
 
@@ -570,6 +570,18 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \item [\textit{PI}] reserved for specific groups
 \item [scavenge] uses idle nodes from other partitions (preempted)
 \end{description}
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Partitions cont.}
+\begin{itemize}
+\item \em{scavenge} can be very useful for short jobs
+\item You can submit to multiple partitions: 
+\verb+sbatch -p general,pi_zhao,scavenge+.
+
 \end{itemize}
 
 \end{frame}
@@ -918,7 +930,7 @@ Some options:
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
+\begin{frame}[fragile]
 \frametitle{Job Arrays}
 
 \begin{itemize}
