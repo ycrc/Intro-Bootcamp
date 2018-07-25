@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{May 2018}
+\date{July 2018}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -300,6 +300,45 @@ Success. Logging you in...
 
 
 \end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Cluster Storage}
+Each cluster has a number of different storage areas for you to use, with different
+rules and performance characteristics.  
+
+\vskip10pt
+
+It is very important to understand the differences.  Generally, each cluster will have:
+
+\begin{description}
+\item[Home]: Backed up, small quota, for scripts, programs, documents, etc.
+\item[Scratch60]: Not backed up.  Automatically purged after 60 days.  For temporary files.
+\item[Project]: Not backed up.  For longer term storage.
+\item[Local HD]: /tmp  For local scratch files.
+\item[RAMDISK]: /dev/shm For local scratch files.
+\item[Storage@Yale]: University-wide storage (active and archive).
+\end{description}
+
+Consider using local HD or ramdisk for intermediate files.  Also consider avoiding files by using pipes.
+
+For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Quotas}
+\begin{itemize}
+\item All storage areas have quota limits, both size and file count
+\item Most limits are per group, exception: home on Ruddle and Farnam
+\item If you hit your limit, you won't be able to write files, so jobs fail
+\item To check your limit: \verb+$ groupquota+
+\item Project and scratch60 have very large limits, home is relatively small.
+\end{itemize}
+
+\end{frame}
+
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
 \frametitle{Running jobs on a cluster}
@@ -337,7 +376,7 @@ Interactive jobs:
 \item require an active connection
 \item for development, debugging, or 
 interactive environments like R and Matlab
-\item one or a few at a time 
+\item one or a few jobs at a time 
 \end{itemize}
 \vskip10pt
 
@@ -364,6 +403,9 @@ Slurm manages all the details of cluster operation:
 \item Prioritizing and scheduling jobs
 \end{itemize}
 
+Slurm documentation:
+https://slurm.schedmd.com/
+
 For information specific to each cluster:
 http://research.computing.yale.edu/support/hpc/clusters
 
@@ -381,6 +423,7 @@ srun -p interactive --pty bash
 
 You'll be logged into a compute node and can run your commands. 
 \vspace{0.1in}
+
 To exit, type exit or ctrl-d
 
 \end{frame}
@@ -391,7 +434,8 @@ To exit, type exit or ctrl-d
 \begin{verbatim}
 farnam-0:~ $ srun --pty -p interactive --mem=8g bash
 c01n01$ module load BWA
-c01n01$ module load SAMtools BWA; bwa mem BWAIndex/genome.fa Data/reads01.fa > reads01.sam
+c01n01$ module load SAMtools 
+c01n01$ bwa mem BWAIndex/genome.fa Data/reads01.fa > reads01.sam
 c01n01$ exit
 farnam-0:~ $
 \end{verbatim}
@@ -401,7 +445,7 @@ farnam-0:~ $
 \begin{frame}[fragile]
 \frametitle{Batch jobs}
 \begin{itemize}
-\item create a script wrapping your job
+\item you create a script wrapping your job
 \item declares resources required
 \item contains the command(s) to run
 \end{itemize}
@@ -417,7 +461,6 @@ farnam-0:~ $
 
 #!/bin/bash
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=robert.bjornson@yale.edu
 #SBATCH -t 3:00 # 3 minutes
 #SBATCH --mem=10g
 
@@ -567,7 +610,7 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \item [week] long jobs on grace/omega
 \item [gpu] nodes with gpus
 \item [bigmem] nodes with large RAM
-\item [\textit{PI}] reserved for specific groups
+\item [\textit{pi\_*}] reserved for specific groups
 \item [scavenge] uses idle nodes from other partitions (preempted)
 \end{description}
 \end{itemize}
@@ -578,8 +621,8 @@ farnam1$ sbatch -p general --mem 8g -c 20 -t 3- job.sh
 \begin{frame}[fragile]
 \frametitle{Partitions cont.}
 \begin{itemize}
-\item \em{scavenge} can be very useful for short jobs
-\item You can submit to multiple partitions: 
+\item scavenge can be very useful for short jobs
+\item You can submit to multiple partitions:
 \verb+sbatch -p general,pi_zhao,scavenge+.
 
 \end{itemize}
@@ -820,31 +863,6 @@ http://research.computing.yale.edu/support/hpc/user-guide
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Cluster Filesystems}
-Each cluster has a number of different filesystems for you to use, with different
-rules and performance characteristics.  
-
-\vskip10pt
-
-It is very important to understand the differences.  Generally, each cluster will have:
-
-\begin{description}
-\item[Home]: Backed up, small quota, for scripts, programs, documents, etc.
-\item[Scratch]: Not backed up.  Automatically purged.  For temporary files.
-\item[Project]: Not backed up.  For longer term storage.
-\item[Local HD]: /tmp  For local scratch files.
-\item[RAMDISK]: /dev/shm For local scratch files.
-\item[Storage@Yale]: University-wide storage (active and archive).
-\end{description}
-
-Consider using local HD or ramdisk for intermediate files.  Also consider avoiding files by using pipes.
-
-For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
-
-\end{frame}
-
-%----------- slide --------------------------------------------------%
 \begin{frame}<presentation:0>[fragile]
 \frametitle{Use Pipes to improve performance}
 
@@ -1077,18 +1095,18 @@ http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
 \item Memory
 
 \begin{itemize}
-\item Use top or /usr/bin/time -a to monitor usage
+\item Use sacct, top or /usr/bin/time -a to monitor usage
 \item Specify memory and walltime requirements
 \end{itemize}
 
-\item Learn Linux! Almost all HPC is linux-based.
+\item Learn Linux! Almost all HPC (world-wide) is linux-based.
 \item Be considerate!  Clusters are shared resources.
 
 \begin{itemize}
 \item Don't run programs on the login nodes.  Use a compute node.
-\item Don't submit a huge number of jobs.  Use simplequeue or job array.
+\item Don't submit a huge number of jobs.  Use dSQ or job array.
 \item Don't do heavy IO to /home.
-\item Keep an eye on quotas.  Don't fill filesystems.
+\item Keep an eye on your quotas. 
 \end{itemize}
 \end{itemize}
 
