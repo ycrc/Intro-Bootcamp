@@ -46,7 +46,7 @@ sbatch array.sh
 module load dSQ
 
 dSQ -h 
-dSQ --jobfile bwajobs.txt --mem=16g > runsq.sh
+dSQ --jobfile bwajobs.txt -t 5:00 --mem=16g > runsq.sh
 sbatch runsq.sh
 (job 13 will fail because input not found)
 
@@ -56,7 +56,6 @@ dSQAutopsy bwajobs.txt job_*status.tsv > failedjobs.txt
 
 sbatch bwa1.sh
 sbatch bwa20.sh
-sbatch bwa_n20.sh
 
 # do mpi
 module load OpenMPI
