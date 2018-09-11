@@ -1,5 +1,6 @@
 #include <mpi.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #define SIZE 10
 
