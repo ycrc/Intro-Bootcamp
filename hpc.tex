@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{July 2018}
+\date{Sept 2018}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -137,7 +137,7 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (May 2018)}
+\frametitle{Summary of Yale Clusters (Sept 2018)}
 \begin{tabular}{|l|l|l|r|}
 \textbf{Cluster} & \bf{Users} & \textbf{Role} & \textbf{CPUs} \\
 \hline
@@ -1067,8 +1067,11 @@ To use them, your program must be explicitly gpu enabled and compiled.
 Your slurm job must request a partition with gpu nodes and explicitly request gpus:
 
 \begin{verbatim}
-srun --pty -p gpu --gres=gpu:2 bash
+srun --pty -p gpu -c 20 --gres=gpu:2 bash
 \end{verbatim}
+
+
+We have a number of generations of gpus: k80, p100, 1080ti, depending on cluster.
 
 For more info see:
 http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
