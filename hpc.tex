@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Nov 2018}
+\date{Jan 2019}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -137,7 +137,7 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (Nov 2018)}
+\frametitle{Summary of Yale Clusters (Jan 2019)}
 \begin{tabular}{|l|l|l|r|}
 \textbf{Cluster} & \bf{Users} & \textbf{Role} & \textbf{CPUs} \\
 \hline
@@ -150,6 +150,7 @@ Milgram & Psychology & HIPAA Data & 1,600 \\
 \regfont
 \vskip 10pt
 Details on each cluster here:
+\vskip 5pt
 \url{http://research.computing.yale.edu/hpc-clusters}
 
 \end{frame}
@@ -221,7 +222,10 @@ laptop$ ssh netid@{omega,grace,etc}.hpc.yale.edu
 \end{verbatim}
 
 From a Windows machine we recommend using mobaXterm
-\url{https://mobaxterm.mobatek.net} or putty: \url{http://www.putty.org}.
+\url{https://mobaxterm.mobatek.net} 
+
+or putty: 
+\url{http://www.putty.org}.
 
 \vskip10pt
 For more information on mobaxterm, see:
@@ -236,7 +240,7 @@ For more information on mobaxterm, see:
 \item Keys are generated as pair:
 \begin{itemize}
 \item ssh-keygen: public (id\_rsa.pub) and private (id\_rsa)
-\item putty/winscp: public (name.pub) and private (name.ppk)
+\item putty/mobaxterm/winscp: public (name.pub) and private (name.ppk)
 \end{itemize}
 \item You should always use a pass phrase to protect private key!
 \item You can freely give the public key to anyone
@@ -313,14 +317,14 @@ It is very important to understand the differences.  Generally, each cluster wil
 
 \begin{description}
 \item[Home]: Backed up, small quota, for scripts, programs, documents, etc.
-\item[Scratch60]: Not backed up.  Automatically purged after 60 days.  For temporary files.
+\item[Scratch60]: Not backed up.  Purged after 60 days.  For temp files.
 \item[Project]: Not backed up.  For longer term storage.
+\item[PI]: Not backed up.  Some groups have dedicated storage.
 \item[Local HD]: /tmp  For local scratch files.
 \item[RAMDISK]: /dev/shm For local scratch files.
 \item[Storage@Yale]: University-wide storage (active and archive).
 \end{description}
 
-Consider using local HD or ramdisk for intermediate files.  Also consider avoiding files by using pipes.
 
 For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
 
@@ -529,6 +533,8 @@ Status of a job & squeue -j \textit{JOBID} \\
 \hline
 Status of a user's jobs & squeue -u \textit{NETID} \\
 \hline
+Get job stats & seff \textit{JOBID} \\
+\hline
 Cancel a job & scancel \textit{JOBID} \\
 \hline
 Get job info for partition & squeue -p \textit{PART} \\
@@ -667,8 +673,9 @@ Examples:
 
 To determine how much memory your job uses:
 \begin{itemize}
-\item /usr/bin/time -a \textit{cmd ...} (maxresident)
+\item \verb+seff <jobid>+ 
 \item \verb+sacct -j <jobid> -l | less -S+ (MaxRSS) 
+\item /usr/bin/time -a \textit{cmd ...} (maxresident)
 \end{itemize}
 
 To specify 8 cores on one node with 8 GB RAM for each core:
@@ -814,6 +821,11 @@ module load Python
 module load Python/3.5.1-foss-2016b
 \end{verbatim}
 
+Note that on grace and omega, module names are prefixed with a class: 
+\begin{verbatim}
+module load Apps/R/2.15.3
+\end{verbatim}
+ 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -985,7 +997,7 @@ Advantages
 \item Keeps track of status of individual jobs
 \item More flexible than job arrays
 \item Automatically schedules jobs onto a single PBS allocation
-\item Time limit is per individual \em{job}
+\item Time limit is per individual job
 \item dSQ replaces a previous tool ``SimpleQueue''
 \end{itemize}
 
