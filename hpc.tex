@@ -22,7 +22,7 @@
   Yale Center for Research Computing \\
   Yale University
 }
-\date{Jan 2019}
+\date{Mar 2019}
 
 %----------- titlepage ----------------------------------------------%
 \begin{frame}[plain]
@@ -53,7 +53,22 @@
 \item Manage compute clusters and support users
 \item Located at 160 St. Ronan st, at the corner of Edwards and St. Ronan
 \item http://research.computing.yale.edu
+\item http://docs.ycrc.yale.edu
 \end{itemize}
+
+\end{frame}
+
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{A note on documentation}
+
+Rather than provide urls to our documentation, I'll use:
+\begin{verbatim}
+DOCS:clusters
+\end{verbatim}
+
+Which means: at docs.ycrc.yale.edu, search for ``clusters''
 
 \end{frame}
 
@@ -137,7 +152,7 @@ Some of the limitations of clusters are:
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Summary of Yale Clusters (Jan 2019)}
+\frametitle{Summary of Yale Clusters (Mar 2019)}
 \begin{tabular}{|l|l|l|r|}
 \textbf{Cluster} & \bf{Users} & \textbf{Role} & \textbf{CPUs} \\
 \hline
@@ -149,48 +164,7 @@ Milgram & Psychology & HIPAA Data & 1,600 \\
 \end{tabular}
 \regfont
 \vskip 10pt
-Details on each cluster here:
-\vskip 5pt
-\url{http://research.computing.yale.edu/hpc-clusters}
-
-\end{frame}
-
-%----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>
-\frametitle{Summary of Yale Clusters (May 2018)}
-\smallfont
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-& \textbf{Omega-next} & \textbf{Grace}& \textbf{Farnam} & \textbf{Ruddle} & \textbf{Milgram} \\
-\hline
-\textbf{Role} & FAS & FAS & LS/Med & YCGA & Psych \\
-\hline
-\textbf{~Total nodes} & 1028* & 216 & 320+ & 156+ & 60 \\
-\hline
-\textbf{~Total cores} & 8500* & 4700 & 5300 & 3000 & ~1500 \\
-\hline
-\textbf{Cores/node} & 8 & 20 & 8-20 & 20 & 20-28 \\
-\hline
-\textbf{GB/node} & 128 & 128-256 & \multicolumn{2}{|c|}{128-1500} & 128-256 \\
-\hline
-\textbf{Network} & QDR IB & FDR IB & \multicolumn{3}{|c|}{10 Gb EN}   \\
-\hline
-\textbf{File system} & Lustre+GPFS & GPFS & GPFS & NAS + GPFS & GPFS \\
-\hline
-\textbf{Batch queueing} & \multicolumn{5}{|c|}{Slurm}  \\
-\hline
-\textbf{GPU nodes} & No & Several & Yes & No & No \\
-\hline
-\textbf{Duo MFA?} & No & No & No & Yes & No \\
-\hline
-\end{tabular}
-\regfont
-\vskip10pt
-* Transition from omega to omega-next ongoing
-\vskip 10pt
-Details on each cluster here:
-\url{http://research.computing.yale.edu/hpc-clusters}
-
+Details on each cluster at DOCS:clusters
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -228,8 +202,7 @@ or putty:
 \url{http://www.putty.org}.
 
 \vskip10pt
-For more information on mobaxterm, see:
-\url{https://research.computing.yale.edu/support/hpc/user-guide/connect-windows}
+For more information on mobaxterm, see DOCS: mobaxterm
 \end{frame}
 
 %----------- slide --------------------------------------------------%
@@ -261,7 +234,7 @@ For more information on mobaxterm, see:
 \item Connect using private key
 \end{enumerate}
 
-This can be tricky the first time.  See http://research.computing.yale.edu/support/hpc/user-guide
+This can be tricky the first time.  See DOCS: ssh
 for the exact steps or contact us if you have problems.
 
 \end{frame}
@@ -299,7 +272,7 @@ Success. Logging you in...
 \begin{itemize}
 \item Don't have a smartphone? Get a hardware device from the ITS Helpdesk
 \item Register another phone: e.g your home or office phone, as a backup
-\item See http://research.computing.yale.edu/support/hpc/user-guide/mfa
+\item See DOCS: mfa
 \end{itemize}
 
 
@@ -326,7 +299,7 @@ It is very important to understand the differences.  Generally, each cluster wil
 \end{description}
 
 
-For more info: \url{http://research.computing.yale.edu/hpc/faq/io-tutorial}
+For more info, DOCS: Monitor CPU
 
 \end{frame}
 
@@ -409,9 +382,6 @@ Slurm manages all the details of cluster operation:
 
 Slurm documentation:
 https://slurm.schedmd.com/
-
-For information specific to each cluster:
-http://research.computing.yale.edu/support/hpc/clusters
 
 \end{frame}
 
@@ -507,13 +477,10 @@ laptop$ scp -r ~/workdir netid@omega.hpc.yale.edu:
 laptop$ rsync -av -e 'ssh -i ~/.ssh/id_rsa' ~/workdir \
         netid@grace.hpc.yale.edu:
 \end{verbatim}
-
+\item For Windows, you can use Mobaxterm for ssh, GUIs, file transfer
 \item Cyberduck is a good graphical tool for Mac or Windows.  \url{https://cyberduck.io}
-
-\item For Windows, you can use Mobaxterm for file transfer. 
-
-\item Graphical copy tools often need configuration when used with Duo (Ruddle).  See:
-http://research.computing.yale.edu/support/hpc/user-guide/transfer-files-or-cluster
+\item Graphical copy tools often need configuration when used with Duo (Ruddle).  
+\item DOC: transfer
 \end{itemize}
 
 \end{frame}
@@ -830,6 +797,24 @@ module load Apps/R/2.15.3
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
+\frametitle{Installing Software}
+What if software you need is not currently installed as a module?
+
+\begin{itemize}
+\item General interest, ask us to install it (hpc@yale.edu)
+\item R and Python packages, we've moved to DYI
+\begin{itemize}
+\item Python: miniconda
+\item R packages: install.packages
+\end{itemize}
+\item bleeding-edge C/C++ apps: try DYI 
+\item More info on our website
+\item We'll help if you run into problems
+\end{itemize}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
 \frametitle{Interactive tools (Python/Matlab/R/Mathematica) as batch jobs}
 
 \begin{verbatim}
@@ -867,15 +852,15 @@ Two different ways:
 \item allocate node, start VNC server there, connect via ssh tunnels
 \item works very well for rich graphics
 \end{itemize}
+\item Coming soon to Farnam: Open On Demand, web-based desktop
 \end{itemize}
 
-More information is here:
-http://research.computing.yale.edu/support/hpc/user-guide
+More information, DOC: X11, VNC
 
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
+\begin{frame}[fragile]
 \frametitle{Use Pipes to improve performance}
 
 \vskip10pt
@@ -917,22 +902,22 @@ $ gunzip -c test.export.txt.gz \
 \end{frame}
 
 %----------- slide --------------------------------------------------%
-\begin{frame}<presentation:0>[fragile]
-\frametitle{Bioinformatics Assistance}
-
-Contact Jim Knight (j.knight@yale.edu)
-
->http://campuspress.yale.edu/knightlab
-
-The Knight lab has a number of high performance, parallel pipelines for
-doing standard analyses:
+\begin{frame}[fragile]
+\frametitle{ Issues with CPU architectures}
 
 \begin{itemize}
-\item read QC
-\item GATK variant detection
+\item Our clusters are heterogeneous, with multiple cpu types
+\item Code compiled on new nodes (with avx2, avx512) often fails on older nodes (avx)
+\item Typical error: ``Instruction Error''
+\item Solutions:
+\begin{enumerate}
+\item Always compile on the oldest node type (we do this).
+\item Always run on the newest node type
+\end{enumerate}
+\item Consult page for your cluster and use -C to choose node type.
+\item DOC: illegal instruction
 \end{itemize}
 \end{frame}
-
 
 %----------- slide --------------------------------------------------%
 \begin{frame}[fragile]
@@ -996,9 +981,8 @@ Advantages
 \item Only one batch job to keep track of
 \item Keeps track of status of individual jobs
 \item More flexible than job arrays
-\item Automatically schedules jobs onto a single PBS allocation
-\item Time limit is per individual job
-\item dSQ replaces a previous tool ``SimpleQueue''
+\item Automatically schedules jobs onto a single Slurm allocation
+\item Limits (walltime, memory, cpus, etc) are \em{per individual job}
 \end{itemize}
 
 \end{frame}
@@ -1026,7 +1010,7 @@ sbatch run.sh
 \end{verbatim}
 \end{enumerate}
 
-For more info, see \url{http://research.computing.yale.edu/support/hpc/user-guide/dead-simple-queue}
+For more info, DOC: dSQ
 
 \end{frame}
 
@@ -1085,8 +1069,7 @@ srun --pty -p gpu -c 20 --gres=gpu:2 bash
 
 We have a number of generations of gpus: k80, p100, 1080ti, depending on cluster.
 
-For more info see:
-http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
+For more info, DOC: gpus and cuda
 
 \end{frame}
 
@@ -1105,7 +1088,7 @@ http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
 \item Input/Output
 \begin{itemize}
 \item Think about input and output files, number and size
-\item Should you use local or ram filesystem? 
+\item Should you use local /tmp or /dev/shm?
 \end{itemize}
 \item Memory
 
@@ -1121,7 +1104,7 @@ http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
 \item Don't run programs on the login nodes.  Use a compute node.
 \item Don't submit a huge number of jobs.  Use dSQ or job array.
 \item Don't do heavy IO to /home.
-\item Keep an eye on your quotas. 
+\item Keep an eye on your storage quotas!
 \end{itemize}
 \end{itemize}
 
@@ -1155,7 +1138,7 @@ http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
 \begin{itemize}
 \item Send an email to: \url{hpc@yale.edu}
 \item Email me: \url{robert.bjornson@yale.edu}
-\item Read documentation at: \url{http://research.computing.yale.edu/hpc-support}
+\item Read documentation at: \url{http://docs.ycrc.yale.edu}
 \item Come to office hours: \url{http://research.computing.yale.edu/support/office-hours-getting-help}
 \end{itemize}
 \end{frame}
@@ -1173,6 +1156,5 @@ http://research.computing.yale.edu/support/hpc/user-guide/gpus-and-cuda
 \end{itemize}
 
 \end{frame}
-
 
 \end{document}
