@@ -8,4 +8,4 @@
 #SBATCH --mail-type ALL
 
 cat Data/reads*.fa > Data/allreads.fa
-module load SAMtools BWA; bwa mem -t 20 BWAIndex/genome.fa Data/allreads.fa | samtools sort -O bam -o Results/allreads.bam -
+module load SAMtools BWA; bwa mem -t 20 Data/BWAIndex/genome.fa Data/allreads.fa | samtools sort -O bam -o Results/allreads.bam -
